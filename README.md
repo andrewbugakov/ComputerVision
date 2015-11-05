@@ -1,7 +1,7 @@
 # Point cloud video generator 
 
 Point cloud video generator is a program wich creates point cloud of given video.<br>
-UI was created on Java (Swing), core - [OpenCV] lib.
+UI was created on Java (SWT), core - [OpenCV] lib.
 
 [OpenCV]:http://opencv.org/ 
 
