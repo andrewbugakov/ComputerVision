@@ -10,6 +10,7 @@ public class MainShell {
         Shell shell = new Shell(display);
         shell.setText("Point Cloud Generator preview");
         shell.setSize(500, 500);
+
         centerWindow(shell);
 //        shell.setToolTipText("This is a window");
         shell.open();
