@@ -1,4 +1,6 @@
-import UI.MainShell;
+package main.java;
+
+import main.java.UI.MainShell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Display;

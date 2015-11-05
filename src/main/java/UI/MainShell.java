@@ -1,4 +1,4 @@
-package UI;
+package main.java.UI;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;

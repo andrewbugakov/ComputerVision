@@ -1,4 +1,4 @@
-package UI;
+package main.java.UI;
 
 import org.eclipse.swt.widgets.Display;
 
