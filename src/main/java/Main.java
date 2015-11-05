@@ -21,6 +21,7 @@ public class Main {
         Display display = new Display();
         Shell shell = new Shell(display);
         shell.setText("Label test");
+
         new Label(shell, SWT.SEPARATOR | SWT.HORIZONTAL);
         Label lblHello = new Label(shell, SWT.NONE);
         lblHello.setText("Simple Label");
