@@ -1,16 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-   
-  <repositories>
-    <repository>
-      <id>javaopencvbook</id>
-      <url>https://raw.github.com/JavaOpenCVBook/code/maven2/</url>
-    </repository>
- </repositories>
- 
- 
+
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.javaopencvbook</groupId>
+  <groupId>ru.ssau</groupId>
   <artifactId>imageFilter</artifactId>
   <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
@@ -28,7 +20,7 @@
              <manifest>
                <addClasspath>true</addClasspath>
                <classpathPrefix>lib/</classpathPrefix>
-               <mainClass>org.javaopencvbook.App</mainClass>
+               <mainClass>ru.sssau.App</mainClass>
              </manifest>
            </archive>
          </configuration>
@@ -87,7 +79,7 @@
     	<artifactId>opencvjar</artifactId>
     	<version>3.0.0</version>    	     
     </dependency>
-	
+
 	<dependency>
 		<groupId>org.javaopencvbook</groupId>
 		<artifactId>opencvjar-runtime</artifactId>

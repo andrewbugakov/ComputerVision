@@ -1,4 +1,4 @@
-package org.javaopencvbook;
+package ru.sssau;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

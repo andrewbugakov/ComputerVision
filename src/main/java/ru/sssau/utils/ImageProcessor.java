@@ -1,4 +1,4 @@
-package org.javaopencvbook.utils;
+package ru.sssau.utils;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
