@@ -24,6 +24,6 @@ Program was developed under software engineering cource at [SSAU] in 2015-2016 b
 [sergei2s31@rambler.ru]:mailto:sergei2s31@rambler.ru?subject=Point%20cloud%20video%20generator
 
 ## FAQ
-Q: I have an "Exception in thread "main" java.lang.UnsatisfiedLinkError: no opencv_java300 in java.library.path". What should I do?
+Q: I have an "Exception in thread "main" java.lang.UnsatisfiedLinkError: no opencv_java300 in java.library.path". What should I do? <br>
 A: You forget to add VM options line at Run/Debug Configurations. Go to "[How to compile project](#how-to-compile-project)" chapter to fix it.
 
