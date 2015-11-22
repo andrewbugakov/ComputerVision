@@ -1,4 +1,4 @@
-package ru.sssau.utils;
+package ru.ssau.utils;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -15,7 +15,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
 
 import org.opencv.core.Mat;
-import org.opencv.imgproc.Imgproc;
 
 public class ImageViewer {
 	private JLabel imageView;

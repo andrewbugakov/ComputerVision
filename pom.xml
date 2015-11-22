@@ -25,7 +25,7 @@
              <manifest>
                <addClasspath>true</addClasspath>
                <classpathPrefix>lib/</classpathPrefix>
-               <mainClass>ru.sssau.App</mainClass>
+               <mainClass>ru.ssau.App</mainClass>
              </manifest>
            </archive>
          </configuration>

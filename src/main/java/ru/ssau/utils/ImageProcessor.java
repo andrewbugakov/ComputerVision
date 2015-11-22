@@ -1,11 +1,9 @@
-package ru.sssau.utils;
+package ru.ssau.utils;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 
 import org.opencv.core.Mat;
-import org.opencv.core.Size;
-import org.opencv.imgproc.Imgproc;
 
 public class ImageProcessor {
 	

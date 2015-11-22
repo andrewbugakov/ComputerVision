@@ -1,4 +1,4 @@
-package ru.sssau;
+package ru.ssau;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

@@ -1,4 +1,4 @@
-package ru.sssau;
+package ru.ssau;
 
 import java.awt.Component;
 import java.awt.GridBagConstraints;
@@ -20,7 +20,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
 
-import ru.sssau.utils.ImageProcessor;
+import ru.ssau.utils.ImageProcessor;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
