@@ -5,7 +5,7 @@ UI was created on Java (SWT), core - [OpenCV] lib.
 
 [OpenCV]:http://opencv.org/ 
 
-## <a name="howto"></a>How to compile project
+## How to compile project
 Steps to setup project in Intelli IDEA:
 1. Download and extract OpenCV from http://opencv.org/downloads.html <br>
 2. Import current project at IDE <br>
@@ -25,5 +25,5 @@ Program was developed under software engineering cource at [SSAU] in 2015-2016 b
 
 ## FAQ
 Q: I have an "Exception in thread "main" java.lang.UnsatisfiedLinkError: no opencv_java300 in java.library.path". What should I do?
-A: You forget to add VM options line at Run/Debug Configurations. Go to "[How to compile project](#howto)" chapter to fix it.
+A: You forget to add VM options line at Run/Debug Configurations. Go to "[How to compile project](#how-to-compile-project)" chapter to fix it.
 
