@@ -8,8 +8,13 @@
   <version>1.0-SNAPSHOT</version>
   <name>kursovoi</name>
   <url>http://maven.apache.org</url>
-  
-  
+
+  <repositories>
+    <repository>
+      <id>javaopencvbook</id>
+      <url>https://raw.github.com/JavaOpenCVBook/code/maven2/</url>
+    </repository>
+  </repositories>
   <build>
     <plugins>
       <plugin>
