@@ -3,6 +3,7 @@ package ru.ssau;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
+import ru.ssau.I18n.Strings;
 
 public class App 
 {
@@ -18,7 +19,7 @@ public class App
 			System.out.println("Couldn't open file " + filePath);
 		}else{
 
-			GUI gui = new GUI("Smooth Filter Example", newImage);
+			GUI gui = new GUI(Strings.getAppTitle(), newImage);
 			gui.init();
 		}
 		return;
