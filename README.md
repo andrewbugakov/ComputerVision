@@ -6,7 +6,7 @@ UI was created on Java (SWT), core - [OpenCV] lib.
 [OpenCV]:http://opencv.org/ 
 
 ## How to compile project
-Steps to setup project in Intelli IDEA: <br>
+Steps to setup project in IntelliJ IDEA: <br>
 1. Download and extract OpenCV from http://opencv.org/downloads.html <br>
 2. Import current project at IDE <br>
 3. Go to Run/Debug Configurations and write in VM options: -Djava.library.path="C://your_path_to_opencv_dll" (e.g. -Djava.library.path="C:\opencv\build\java\x64") <br>
