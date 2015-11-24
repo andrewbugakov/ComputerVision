@@ -1,4 +1,4 @@
-package ru.ssau.I18n;
+package ru.ssau.i18n;
 
 import java.util.ResourceBundle;
 
