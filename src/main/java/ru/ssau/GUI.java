@@ -20,6 +20,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
 
+import ru.ssau.gui.core.Frameable;
 import ru.ssau.utils.ImageProcessor;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -27,8 +28,7 @@ import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
-public class GUI {
-
+public class GUI implements Frameable {
 
 	private static final String blurString = "Blur";
 	private static final String gaussianString = "Gaussian";
@@ -53,21 +53,6 @@ public class GUI {
 		originalImage = newImage.clone();
 		processOperation();
 		updateView();
-	}
-
-	public void init() {
-		setSystemLookAndFeel();
-		initGUI();
-	}
-
-	private void initGUI() {
-		JFrame frame = createJFrame(windowName);
-		updateView();
-
-		frame.pack();
-		frame.setLocationRelativeTo(null);
-		frame.setVisible(true);
-
 	}
 
 	private JFrame createJFrame(String windowName) {
@@ -200,10 +185,7 @@ public class GUI {
 		c.gridy = 0;
 
 		frame.add(radioOperationPanel,c);
-
 	}
-	
-	
 
 	private void setupImage(JFrame frame) {
 		
@@ -214,22 +196,6 @@ public class GUI {
 		c.gridx = 0;
 		
 		frame.add(imageView,c);
-		
-		
-	}
-
-	private void setSystemLookAndFeel() {
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (UnsupportedLookAndFeelException e) {
-			e.printStackTrace();
-		}
 	}
 
 	private void updateView() {
@@ -256,9 +222,15 @@ public class GUI {
 			else if(bilateralString.equals(filterMode)){
 				Imgproc.bilateralFilter(image, output, 9, 100, 100);
 			}
-			
 		}
-		
 	}
 
+	public JFrame getFrame() {
+		JFrame frame = createJFrame(windowName);
+		updateView();
+
+		frame.pack();
+		frame.setLocationRelativeTo(null);
+		return frame;
+	}
 }

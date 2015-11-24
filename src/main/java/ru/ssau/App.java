@@ -5,11 +5,12 @@ import org.apache.logging.log4j.Logger;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
+import ru.ssau.gui.core.NavigationController;
 import ru.ssau.i18n.Strings;
 
 public class App 
 {
-	private static Logger logger = LogManager.getLogger(App.class.getName());
+	private static Logger logger = LogManager.getLogger(App.class.getSimpleName());
 
 	static{ System.loadLibrary(Core.NATIVE_LIBRARY_NAME); }
 
@@ -22,10 +23,9 @@ public class App
 
 		if(newImage.dataAddr()==0){
 			System.out.println("Couldn't open file " + filePath);
-		}else{
-
+		} else {
 			GUI gui = new GUI(Strings.getAppTitle(), newImage);
-			gui.init();
+			NavigationController.open(gui);
 		}
 		return;
 	}
