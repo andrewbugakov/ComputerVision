@@ -5,7 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
-import ru.ssau.I18n.Strings;
+import ru.ssau.i18n.Strings;
 
 public class App 
 {
