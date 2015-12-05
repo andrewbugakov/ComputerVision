@@ -6,7 +6,7 @@ using Emgu.CV;
 
 namespace VideoFeatureMatching.Utils
 {
-    public static class BitmapSourceConvertExtentions
+    public static class BitmapSourceConvertExtention
     {
         /// <summary>
         /// Delete a GDI object

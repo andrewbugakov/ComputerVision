@@ -1,0 +1,45 @@
+﻿<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style x:Key="MenuImageStyle" TargetType="{x:Type Image}">
+        <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Opacity" Value="0.2" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="AppMenuImageStyle" TargetType="{x:Type Image}" BasedOn="{StaticResource MenuImageStyle}">
+        <Setter Property="MaxHeight" Value="30"/>
+        <Setter Property="MaxWidth" Value="30"/>
+    </Style>
+
+    <Style x:Key="ControlMenuImageStyle" TargetType="{x:Type Image}" BasedOn="{StaticResource MenuImageStyle}">
+    </Style>
+
+    <Style x:Key="EmptyMenuItemStyle" TargetType="{x:Type MenuItem}">
+        <Setter Property="IsEnabled" Value="False"/>
+    </Style>
+
+    <Style x:Key="EmptyHorizontalMenuItemStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource EmptyMenuItemStyle}">
+        <Setter Property="MinWidth" Value="30"/>
+    </Style>
+
+    <Style x:Key="EmptyVerticalMenuItemStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource EmptyMenuItemStyle}">
+        <Setter Property="MinHeight" Value="30"/>
+    </Style>
+    
+    <Style x:Key="VerticalMenu" TargetType="{x:Type StackPanel}">
+        <Setter Property="Orientation" Value="Vertical"/>
+    </Style>
+
+    <Style x:Key="VerticalMenuButton" TargetType="{x:Type ButtonBase}">
+        <Setter Property="Height" Value="50" />
+        <Setter Property="Width" Value="50" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Padding" Value="10" />
+        <Setter Property="BorderThickness" Value="0" />
+    </Style>
+    
+</ResourceDictionary>

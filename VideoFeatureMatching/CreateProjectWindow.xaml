@@ -1,0 +1,42 @@
+﻿<Window x:Class="VideoFeatureMatching.CreateProjectWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:l10N="clr-namespace:VideoFeatureMatching.L10n"
+        xmlns:converters="clr-namespace:VideoFeatureMatching.Converters"
+        Title="CreateProjectWindow" Height="300" Width="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Image x:Name="previewImage" Grid.Column="0" Grid.Row="0" Source="{Binding PreviewImageSource, Converter={converters:EmguImageConverter}}"/>
+        <StackPanel Grid.Column="1" Grid.Row="0">
+            <TextBlock Text="{x:Static l10N:Strings.VideoFile}"/>
+            <Grid >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Text="{Binding VideoPath}" Grid.ColumnSpan="2"/>
+                <Button Grid.Column="1" Content="..." Command="{Binding OpenVideoCommand}"/>
+            </Grid>
+            <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft">
+                <Button Content="{x:Static l10N:Strings.Start}" Command="{Binding StartCommand}"/>
+                <Button Content="{x:Static l10N:Strings.Finish}" Command="{Binding FinishCommand}"/>
+            </StackPanel>
+        </StackPanel>
+        <Grid Grid.Row="1" Grid.ColumnSpan="2">
+            <ProgressBar Height="20" Value="{Binding Progress}" Minimum="0" Maximum="1"/>
+            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding ProgressText}"/>
+        </Grid>
+        <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" FlowDirection="RightToLeft">
+            <Button Content="{x:Static l10N:Strings.Ready}" Command="{Binding ReadyCommand}"/>
+            <Button Content="{x:Static l10N:Strings.Close}" Command="{Binding CloseCommand}"/>
+        </StackPanel>
+    </Grid>
+</Window>

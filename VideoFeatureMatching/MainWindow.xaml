@@ -1,6 +1,7 @@
 ﻿<Window x:Class="VideoFeatureMatching.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:l10n="clr-namespace:VideoFeatureMatching.L10n"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -12,19 +13,17 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <StackPanel
-            Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
-            <Button x:Name="captureButton" Content="Capture" Click="captureButtonClick" Margin="10"/>
-            <Button Content="Flip Horizontal" Click="FlipHorizontalButtonClick" Margin="10"/>
-            <Button Content="Flip Vertical" Click="FlipVerticalButtonClick" Margin="10"/>
-        </StackPanel>
-        <Image
-            x:Name="captureImageBox" Grid.Row="1" Grid.Column="0"/>
-        <Image
-            x:Name="grayscaleImageBox" Grid.Row="2" Grid.Column="0"/>
-        <Image
-            x:Name="smoothedGrayscaleImageBox" Grid.Row="1" Grid.Column="1"/>
-        <Image
-            x:Name="cannyImageBox" Grid.Row="2" Grid.Column="1"/>
+        <Menu Grid.ColumnSpan="2">
+            <MenuItem Header="{x:Static l10n:Strings.File}">
+                <MenuItem Header="{x:Static l10n:Strings.Create}" Command="{Binding CreateProjectCommand}"/>
+                <MenuItem Header="{x:Static l10n:Strings.Open}" Command="{Binding OpenProjectCommand}"/>
+                <MenuItem Header="{x:Static l10n:Strings.Save}" Command="{Binding SaveProjectCommand}"/>
+                <MenuItem Header="{x:Static l10n:Strings.SaveAs}" Command="{Binding SaveAsProjectCommand}"/>
+                <MenuItem Header="{x:Static l10n:Strings.Close}" Command="{Binding CloseProjectCommand}"/>
+                <Separator/>
+                <MenuItem Header="{x:Static l10n:Strings.Exit}" Command="{Binding ExitCommand}"/>
+            </MenuItem>
+            <MenuItem Header="{x:Static l10n:Strings.About}" Command="{Binding OpenAboutCommmad}"/>
+        </Menu>
     </Grid>
 </Window>
