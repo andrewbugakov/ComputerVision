@@ -3,7 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:l10N="clr-namespace:VideoFeatureMatching.L10n"
         xmlns:converters="clr-namespace:VideoFeatureMatching.Converters"
-        Title="CreateProjectWindow" Height="300" Width="300">
+        x:Name="window"
+        Title="{x:Static l10N:Strings.Creation}" Height="500" Width="650">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -11,32 +12,49 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
-        <Image x:Name="previewImage" Grid.Column="0" Grid.Row="0" Source="{Binding PreviewImageSource, Converter={converters:EmguImageConverter}}"/>
+        <Image x:Name="previewImage" Margin="5" Grid.Column="0" Grid.Row="0" Source="{Binding PreviewImageSource, Converter={converters:EmguImageConverter}}"/>
         <StackPanel Grid.Column="1" Grid.Row="0">
-            <TextBlock Text="{x:Static l10N:Strings.VideoFile}"/>
-            <Grid >
+            <TextBlock Text="{x:Static l10N:Strings.VideoFile}" Margin="5,5,5,0"/>
+            <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBox Text="{Binding VideoPath}" Grid.ColumnSpan="2"/>
-                <Button Grid.Column="1" Content="..." Command="{Binding OpenVideoCommand}"/>
+                <TextBox Text="{Binding VideoPath}" Margin="5,5,0,5"/>
+                <Button Grid.Column="1" Content="{x:Static l10N:Strings.Choose}" Margin="5" Click="OpenVideoFile_OnClick"/>
             </Grid>
+            <TextBlock Text="{x:Static l10N:Strings.DetectorLabel}" Margin="5,5,5,0"/>
+            <ComboBox SelectedIndex="{Binding SelectedDetector, Converter={converters:DetectorConverter}, Mode=TwoWay}" Margin="5">
+                <ComboBoxItem Content="{x:Static l10N:Strings.Detector1}"/>
+                <ComboBoxItem Content="{x:Static l10N:Strings.Detector2}"/>
+                <ComboBoxItem Content="{x:Static l10N:Strings.Detector3}"/>
+            </ComboBox>
+            <TextBlock Text="{x:Static l10N:Strings.DescripterLabel}" Margin="5,5,5,0"/>
+            <ComboBox SelectedIndex="{Binding SelectedDescripter, Converter={converters:DescripterConverter}, Mode=TwoWay}" Margin="5">
+                <ComboBoxItem Content="{x:Static l10N:Strings.Descripter1}"/>
+                <ComboBoxItem Content="{x:Static l10N:Strings.Descripter2}"/>
+                <ComboBoxItem Content="{x:Static l10N:Strings.Descripter3}"/>
+            </ComboBox>
+            <TextBlock Text="{x:Static l10N:Strings.MatcherLabel}" Margin="5,5,5,0"/>
+            <ComboBox SelectedIndex="{Binding SelectedMatcher, Converter={converters:MatherConverter}, Mode=TwoWay}" Margin="5">
+                <ComboBoxItem Content="{x:Static l10N:Strings.Matcher1}"/>
+                <ComboBoxItem Content="{x:Static l10N:Strings.Matcher2}"/>
+            </ComboBox>
             <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft">
-                <Button Content="{x:Static l10N:Strings.Start}" Command="{Binding StartCommand}"/>
-                <Button Content="{x:Static l10N:Strings.Finish}" Command="{Binding FinishCommand}"/>
+                <Button Content="{x:Static l10N:Strings.Finish}" Command="{Binding FinishCommand}" Margin="5" MinWidth="50"/>
+                <Button Content="{x:Static l10N:Strings.Start}" Command="{Binding StartCommand}" Margin="5" MinWidth="50"/>
             </StackPanel>
         </StackPanel>
         <Grid Grid.Row="1" Grid.ColumnSpan="2">
-            <ProgressBar Height="20" Value="{Binding Progress}" Minimum="0" Maximum="1"/>
-            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding ProgressText}"/>
+            <ProgressBar Height="20" Value="{Binding Progress}" Minimum="0" Maximum="1" Margin="5"/>
+            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding ProgressText}" Margin="5"/>
         </Grid>
         <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" FlowDirection="RightToLeft">
-            <Button Content="{x:Static l10N:Strings.Ready}" Command="{Binding ReadyCommand}"/>
-            <Button Content="{x:Static l10N:Strings.Close}" Command="{Binding CloseCommand}"/>
+            <Button Content="{x:Static l10N:Strings.Close}" Command="{Binding CloseCommand}" CommandParameter="{Binding ElementName=window}" Margin="5" MinWidth="50"/>
+            <Button Content="{x:Static l10N:Strings.Ready}" Command="{Binding ReadyCommand}" CommandParameter="{Binding ElementName=window}" Margin="5" MinWidth="50"/>
         </StackPanel>
     </Grid>
 </Window>

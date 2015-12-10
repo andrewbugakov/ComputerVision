@@ -127,6 +127,15 @@ namespace VideoFeatureMatching.L10n {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Choose.
+        /// </summary>
+        public static string Choose {
+            get {
+                return ResourceManager.GetString("Choose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Close.
         /// </summary>
         public static string Close {
@@ -145,6 +154,15 @@ namespace VideoFeatureMatching.L10n {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Point cloud creation.
+        /// </summary>
+        public static string Creation {
+            get {
+                return ResourceManager.GetString("Creation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Credits.
         /// </summary>
         public static string Credits {
@@ -159,6 +177,78 @@ namespace VideoFeatureMatching.L10n {
         public static string Data {
             get {
                 return ResourceManager.GetString("Data", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Descripter1.
+        /// </summary>
+        public static string Descripter1 {
+            get {
+                return ResourceManager.GetString("Descripter1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Sift.
+        /// </summary>
+        public static string Descripter2 {
+            get {
+                return ResourceManager.GetString("Descripter2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Brief.
+        /// </summary>
+        public static string Descripter3 {
+            get {
+                return ResourceManager.GetString("Descripter3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Description:.
+        /// </summary>
+        public static string DescripterLabel {
+            get {
+                return ResourceManager.GetString("DescripterLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Surf.
+        /// </summary>
+        public static string Detector1 {
+            get {
+                return ResourceManager.GetString("Detector1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Fast.
+        /// </summary>
+        public static string Detector2 {
+            get {
+                return ResourceManager.GetString("Detector2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на ORB.
+        /// </summary>
+        public static string Detector3 {
+            get {
+                return ResourceManager.GetString("Detector3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Detector:.
+        /// </summary>
+        public static string DetectorLabel {
+            get {
+                return ResourceManager.GetString("DetectorLabel", resourceCulture);
             }
         }
         
@@ -298,6 +388,33 @@ namespace VideoFeatureMatching.L10n {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на BFL2.
+        /// </summary>
+        public static string Matcher1 {
+            get {
+                return ResourceManager.GetString("Matcher1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на BFL2Sqr.
+        /// </summary>
+        public static string Matcher2 {
+            get {
+                return ResourceManager.GetString("Matcher2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Matcher:.
+        /// </summary>
+        public static string MatcherLabel {
+            get {
+                return ResourceManager.GetString("MatcherLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Open.
         /// </summary>
         public static string Open {
@@ -375,6 +492,33 @@ namespace VideoFeatureMatching.L10n {
         public static string Start {
             get {
                 return ResourceManager.GetString("Start", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на MP4|*.mp4.
+        /// </summary>
+        public static string VideoExtenstion1 {
+            get {
+                return ResourceManager.GetString("VideoExtenstion1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на AVI|*.avi.
+        /// </summary>
+        public static string VideoExtenstion2 {
+            get {
+                return ResourceManager.GetString("VideoExtenstion2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на CHANGE IT!!|*.avi3.
+        /// </summary>
+        public static string VideoExtenstion3 {
+            get {
+                return ResourceManager.GetString("VideoExtenstion3", resourceCulture);
             }
         }
         

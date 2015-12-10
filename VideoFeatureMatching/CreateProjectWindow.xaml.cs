@@ -11,6 +11,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Microsoft.Win32;
+using VideoFeatureMatching.L10n;
+using VideoFeatureMatching.ViewModels;
 
 namespace VideoFeatureMatching
 {
@@ -22,6 +25,26 @@ namespace VideoFeatureMatching
         public CreateProjectWindow()
         {
             InitializeComponent();
+        }
+
+        public CreateProjectViewModel ViewModel
+        {
+            get { return (CreateProjectViewModel) DataContext; }
+        }
+
+        private void OpenVideoFile_OnClick(object sender, RoutedEventArgs e)
+        {
+            var openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = String.Format("{0}|{1}|{2}",
+                Strings.VideoExtenstion1,
+                Strings.VideoExtenstion2,
+                Strings.VideoExtenstion3);
+
+            var result = openFileDialog.ShowDialog();
+            if (result.HasValue && result.Value)
+            {
+                ViewModel.VideoPath = openFileDialog.FileName;
+            }
         }
     }
 }

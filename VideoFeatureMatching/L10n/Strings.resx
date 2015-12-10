@@ -226,4 +226,52 @@
   <data name="Ready" xml:space="preserve">
     <value>Ready</value>
   </data>
+  <data name="Choose" xml:space="preserve">
+    <value>Choose</value>
+  </data>
+  <data name="Detector1" xml:space="preserve">
+    <value>Surf</value>
+  </data>
+  <data name="Detector2" xml:space="preserve">
+    <value>Fast</value>
+  </data>
+  <data name="Detector3" xml:space="preserve">
+    <value>ORB</value>
+  </data>
+  <data name="Creation" xml:space="preserve">
+    <value>Point cloud creation</value>
+  </data>
+  <data name="Descripter1" xml:space="preserve">
+    <value>Descripter1</value>
+  </data>
+  <data name="Descripter2" xml:space="preserve">
+    <value>Sift</value>
+  </data>
+  <data name="Descripter3" xml:space="preserve">
+    <value>Brief</value>
+  </data>
+  <data name="DescripterLabel" xml:space="preserve">
+    <value>Description:</value>
+  </data>
+  <data name="DetectorLabel" xml:space="preserve">
+    <value>Detector:</value>
+  </data>
+  <data name="MatcherLabel" xml:space="preserve">
+    <value>Matcher:</value>
+  </data>
+  <data name="Matcher1" xml:space="preserve">
+    <value>BFL2</value>
+  </data>
+  <data name="Matcher2" xml:space="preserve">
+    <value>BFL2Sqr</value>
+  </data>
+  <data name="VideoExtenstion1" xml:space="preserve">
+    <value>MP4|*.mp4</value>
+  </data>
+  <data name="VideoExtenstion2" xml:space="preserve">
+    <value>AVI|*.avi</value>
+  </data>
+  <data name="VideoExtenstion3" xml:space="preserve">
+    <value>CHANGE IT!!|*.avi3</value>
+  </data>
 </root>

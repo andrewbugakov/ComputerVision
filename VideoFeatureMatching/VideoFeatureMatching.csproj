@@ -43,6 +43,12 @@
     <Reference Include="Emgu.CV.Cuda">
       <HintPath>libs\Emgu.CV.Cuda.dll</HintPath>
     </Reference>
+    <Reference Include="Emgu.CV.OCR">
+      <HintPath>libs\Emgu.CV.OCR.dll</HintPath>
+    </Reference>
+    <Reference Include="Emgu.CV.Stitching">
+      <HintPath>libs\Emgu.CV.Stitching.dll</HintPath>
+    </Reference>
     <Reference Include="Emgu.CV.UI">
       <HintPath>libs\Emgu.CV.UI.dll</HintPath>
     </Reference>
@@ -63,6 +69,10 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="ZedGraph, Version=5.1.5.28844, Culture=neutral, PublicKeyToken=02a83cbd123fcd60, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>libs\ZedGraph.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -73,7 +83,14 @@
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\BaseConverter.cs" />
+    <Compile Include="Converters\DescripterConverter.cs" />
+    <Compile Include="Converters\DetectorConverter.cs" />
     <Compile Include="Converters\EmguImageConverter.cs" />
+    <Compile Include="Converters\MatherConverter.cs" />
+    <Compile Include="Core\Detectors.cs" />
+    <Compile Include="Core\Descripters.cs" />
+    <Compile Include="Core\Matchers.cs" />
+    <Compile Include="Core\VideoFileUtils.cs" />
     <Compile Include="CreateProjectWindow.xaml.cs">
       <DependentUpon>CreateProjectWindow.xaml</DependentUpon>
     </Compile>
@@ -92,6 +109,7 @@
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Services\MessageService.cs" />
     <Compile Include="Utils\Command.cs" />
+    <Compile Include="Utils\Command.generic.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\CreateProjectViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
@@ -138,6 +156,7 @@
     <EmbeddedResource Include="L10n\Strings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="L10n\Strings.ru.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -158,7 +177,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controls\" />
-    <Folder Include="Core\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="x64\cvextern.dll">

@@ -26,13 +26,15 @@ namespace VideoFeatureMatching
     {
         public MainWindow()
         {
-            InitializeComponent();
+            CvInvoke.UseOpenCL = false;
             ViewModel = new MainViewModel();
 
-            Closing += (sender, args) =>
-            {
-                ViewModel.ExitCommmad.Execute();
-            };
+            InitializeComponent();
+
+//            Closing += (sender, args) =>
+//            {
+//                ViewModel.ExitCommmad.Execute();
+//            };
         }
 
         public MainViewModel ViewModel
