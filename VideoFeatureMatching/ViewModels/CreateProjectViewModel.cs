@@ -30,7 +30,10 @@ namespace VideoFeatureMatching.ViewModels
         private Descripters _selectedDescripter;
         private Matchers _selectedMatcher;
         private string _videoPath;
-        private bool _hasGenerationStarted;
+        private FeatureVideoModel _tempModel;
+        private int _framesCount;
+        private int _selectedFrameIndex;
+        private FeatureGeneratingStates _generatingStates;
 
         public CreateProjectViewModel()
         {
@@ -59,7 +62,7 @@ namespace VideoFeatureMatching.ViewModels
             // surf.DetectAndCompute(uModelImage, null, keyPoints, modelDescriptors, true);
 
             Mat resultFrame = new Mat();
-            Features2DToolbox.DrawKeypoints(frame, keyPoints, resultFrame, new Bgr(0, 0, 255), Features2DToolbox.KeypointDrawType.Default);
+            Features2DToolbox.DrawKeypoints(frame, keyPoints, resultFrame, new Bgr(0, 0, 255), Features2DToolbox.KeypointDrawType.DrawRichKeypoints);
 
 
             PreviewImageSource = resultFrame;
@@ -93,17 +96,18 @@ namespace VideoFeatureMatching.ViewModels
 //
 //                watch.Stop();
 //            }
-
             SelectedFrameIndex++;
-
-            RaisePropertyChanged("Progress");
-            RaisePropertyChanged("ProgressText");
+            if (SelectedFrameIndex == FramesCount)
+            {
+                GeneratingStates = FeatureGeneratingStates.Finished;
+            }
         }
 
-        public ProjectFile<object> GetProjectFile()
+        public ProjectFile<FeatureVideoModel> GetProjectFile()
         {
-            // TODO implement
-            return null;
+            return GeneratingStates == FeatureGeneratingStates.Finished 
+                ? new ProjectFile<FeatureVideoModel>(_tempModel) 
+                : null;
         }
 
         #region Public properties
@@ -170,18 +174,16 @@ namespace VideoFeatureMatching.ViewModels
 
         #region Generation handlers
 
-        public bool HasFinished { get; private set; }
-
-        public bool HasGenerationStarted
+        private FeatureGeneratingStates GeneratingStates
         {
-            get { return _hasGenerationStarted; }
-            private set
+            get { return _generatingStates; }
+            set
             {
-                if (value.Equals(_hasGenerationStarted)) return;
-                _hasGenerationStarted = value;
-                RaisePropertyChanged();
+                if (value == _generatingStates) return;
+                _generatingStates = value;
                 RaisePropertyChanged("StartCommand");
                 RaisePropertyChanged("FinishCommand");
+                RaisePropertyChanged("ReadyCommand");
             }
         }
 
@@ -192,12 +194,14 @@ namespace VideoFeatureMatching.ViewModels
                 return new Command(() =>
                 {
                     _capture = new Capture(VideoPath);
+                    _capture.ImageGrabbed += CaptureOnImageGrabbed;
+
                     SelectedFrameIndex = 0;
                     FramesCount = (int)_capture.GetCaptureProperty(CapProp.FrameCount);
-                    _capture.ImageGrabbed += CaptureOnImageGrabbed;
+
                     _capture.Start();
-                    HasGenerationStarted = true;
-                }, () => IsVideoSelected && !HasGenerationStarted);
+                    GeneratingStates = FeatureGeneratingStates.Processing;
+                }, () => IsVideoSelected && GeneratingStates != FeatureGeneratingStates.Processing);
             }
         }
 
@@ -207,16 +211,12 @@ namespace VideoFeatureMatching.ViewModels
             {
                 return new Command(() =>
                 {
-                    var capture = _capture;
+                    _capture.ImageGrabbed -= CaptureOnImageGrabbed;
+                    _capture.Stop();
+                    _capture.Dispose();
                     _capture = null;
-
-                    capture.ImageGrabbed -= CaptureOnImageGrabbed;
-                    capture.Stop();
-                    capture.Dispose();
-                    HasGenerationStarted = false;
-
-                    SelectedFrameIndex = 0;
-                }, () => IsVideoSelected && HasGenerationStarted);
+                    GeneratingStates = FeatureGeneratingStates.Idle;
+                }, () => IsVideoSelected && GeneratingStates == FeatureGeneratingStates.Processing);
             }
         }
 
@@ -254,7 +254,7 @@ namespace VideoFeatureMatching.ViewModels
                 return new Command<Window>(window =>
                 {
                     window.Close();
-                }, () => HasFinished);
+                }, () => GeneratingStates == FeatureGeneratingStates.Finished);
             }
         }
 
@@ -275,9 +275,29 @@ namespace VideoFeatureMatching.ViewModels
 
         #region Private properties
 
-        private int FramesCount { get; set; }
+        private int FramesCount
+        {
+            get { return _framesCount; }
+            set
+            {
+                if (value == _framesCount) return;
+                _framesCount = value;
+                RaisePropertyChanged("Progress");
+                RaisePropertyChanged("ProgressText");
+            }
+        }
 
-        private int SelectedFrameIndex { get; set; }
+        private int SelectedFrameIndex
+        {
+            get { return _selectedFrameIndex; }
+            set
+            {
+                if (value == _selectedFrameIndex) return;
+                _selectedFrameIndex = value;
+                RaisePropertyChanged("Progress");
+                RaisePropertyChanged("ProgressText");
+            }
+        }
 
         #endregion
 

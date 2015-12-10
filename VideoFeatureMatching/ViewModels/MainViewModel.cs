@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows;
+using VideoFeatureMatching.Core;
 using VideoFeatureMatching.DAL;
 using VideoFeatureMatching.L10n;
 using VideoFeatureMatching.Utils;
@@ -9,9 +10,9 @@ namespace VideoFeatureMatching.ViewModels
 {
     public class MainViewModel : BaseViewModel
     {
-        private readonly FileAccessor<object> _fileAccessor = new FileAccessor<object>();
+        private readonly FileAccessor<FeatureVideoModel> _fileAccessor = new FileAccessor<FeatureVideoModel>();
 
-        private ProjectFile<object> _projectFile;
+        private ProjectFile<FeatureVideoModel> _projectFile;
 
         #region General Properties
 
@@ -49,7 +50,7 @@ namespace VideoFeatureMatching.ViewModels
         public bool IsProjectOpened { get { return _projectFile != null; } }
         public bool IsProjectSaved { get { return _projectFile != null && _projectFile.IsSaved; } }
 
-        private void OpenProject(ProjectFile<object> projectFile)
+        private void OpenProject(ProjectFile<FeatureVideoModel> projectFile)
         {
             _projectFile = projectFile;
             _projectFile.ProjectSaved += ProjectFileOnProjectSaved;

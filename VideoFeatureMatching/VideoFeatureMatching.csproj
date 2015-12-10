@@ -89,6 +89,7 @@
     <Compile Include="Converters\MatherConverter.cs" />
     <Compile Include="Core\Detectors.cs" />
     <Compile Include="Core\Descripters.cs" />
+    <Compile Include="Core\FeatureVideoModel.cs" />
     <Compile Include="Core\Matchers.cs" />
     <Compile Include="Core\VideoFileUtils.cs" />
     <Compile Include="CreateProjectWindow.xaml.cs">
@@ -112,6 +113,7 @@
     <Compile Include="Utils\Command.generic.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\CreateProjectViewModel.cs" />
+    <Compile Include="ViewModels\FeatureGeneratingStates.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="Utils\BitmapSourceConvertExtention.cs" />
     <Page Include="AboutWindow.xaml">
