@@ -37,9 +37,6 @@ namespace VideoFeatureMatching.ViewModels
             _detector = GetNativeDetector(SelectedDetector);
             _descripter = GetNativeDescripter(SelectedDescripter);
             _matcher = GetNativeMatcher(SelectedMatcher);
-
-            _capture = new Capture();
-            _capture.ImageGrabbed += CaptureOnImageGrabbed;
         }
 
         private void CaptureOnImageGrabbed(object sender, EventArgs eventArgs)
@@ -96,6 +93,11 @@ namespace VideoFeatureMatching.ViewModels
 //
 //                watch.Stop();
 //            }
+
+            SelectedFrameIndex++;
+
+            RaisePropertyChanged("Progress");
+            RaisePropertyChanged("ProgressText");
         }
 
         public ProjectFile<object> GetProjectFile()
@@ -189,6 +191,10 @@ namespace VideoFeatureMatching.ViewModels
             {
                 return new Command(() =>
                 {
+                    _capture = new Capture(VideoPath);
+                    SelectedFrameIndex = 0;
+                    FramesCount = (int)_capture.GetCaptureProperty(CapProp.FrameCount);
+                    _capture.ImageGrabbed += CaptureOnImageGrabbed;
                     _capture.Start();
                     HasGenerationStarted = true;
                 }, () => IsVideoSelected && !HasGenerationStarted);
@@ -201,8 +207,15 @@ namespace VideoFeatureMatching.ViewModels
             {
                 return new Command(() =>
                 {
-                    _capture.Stop();
+                    var capture = _capture;
+                    _capture = null;
+
+                    capture.ImageGrabbed -= CaptureOnImageGrabbed;
+                    capture.Stop();
+                    capture.Dispose();
                     HasGenerationStarted = false;
+
+                    SelectedFrameIndex = 0;
                 }, () => IsVideoSelected && HasGenerationStarted);
             }
         }
@@ -226,9 +239,9 @@ namespace VideoFeatureMatching.ViewModels
 
         #region Progress handlers
 
-        public double Progress { get; set; }
+        public double Progress { get { return FramesCount == 0 ? 0 : (double)SelectedFrameIndex/FramesCount; }}
 
-        public string ProgressText { get; set; }
+        public string ProgressText { get { return (int)(Progress*100) + "%"; } }
 
         #endregion
 
@@ -261,6 +274,10 @@ namespace VideoFeatureMatching.ViewModels
         #endregion
 
         #region Private properties
+
+        private int FramesCount { get; set; }
+
+        private int SelectedFrameIndex { get; set; }
 
         #endregion
 
@@ -315,12 +332,8 @@ namespace VideoFeatureMatching.ViewModels
 
         public void Dispose()
         {
-            if (_capture != null)
-            {
-                _capture.Stop();
-                _capture.Dispose();
-                _capture = null;
-            }
+            // dispose camera
+            FinishCommand.Execute();
         }
 
         #endregion
