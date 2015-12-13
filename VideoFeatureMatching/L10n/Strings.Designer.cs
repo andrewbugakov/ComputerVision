@@ -181,7 +181,7 @@ namespace VideoFeatureMatching.L10n {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Descripter1.
+        ///   Ищет локализованную строку, похожую на Surf.
         /// </summary>
         public static string Descripter1 {
             get {
@@ -240,6 +240,15 @@ namespace VideoFeatureMatching.L10n {
         public static string Detector3 {
             get {
                 return ResourceManager.GetString("Detector3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на SIFT.
+        /// </summary>
+        public static string Detector4 {
+            get {
+                return ResourceManager.GetString("Detector4", resourceCulture);
             }
         }
         
@@ -397,7 +406,7 @@ namespace VideoFeatureMatching.L10n {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на BFL2Sqr.
+        ///   Ищет локализованную строку, похожую на Hamming.
         /// </summary>
         public static string Matcher2 {
             get {

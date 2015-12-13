@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using Emgu.CV;
@@ -15,7 +16,9 @@ using VideoFeatureMatching.Core;
 using VideoFeatureMatching.DAL;
 using VideoFeatureMatching.L10n;
 using VideoFeatureMatching.Utils;
+using Color = System.Drawing.Color;
 using DescriptorMatcher = Emgu.CV.Features2D.DescriptorMatcher;
+using Point = System.Drawing.Point;
 
 namespace VideoFeatureMatching.ViewModels
 {
@@ -26,7 +29,6 @@ namespace VideoFeatureMatching.ViewModels
         private Detectors _selectedDetector;
         private Feature2D _detector;
         private Feature2D _descripter;
-        private DescriptorMatcher _matcher;
         private Descripters _selectedDescripter;
         private Matchers _selectedMatcher;
         private string _videoPath;
@@ -39,65 +41,82 @@ namespace VideoFeatureMatching.ViewModels
         {
             _detector = GetNativeDetector(SelectedDetector);
             _descripter = GetNativeDescripter(SelectedDescripter);
-            _matcher = GetNativeMatcher(SelectedMatcher);
         }
+
+        private Mat _previousDescripters;
 
         private void CaptureOnImageGrabbed(object sender, EventArgs eventArgs)
         {
-            Mat frame = new Mat();
-            _capture.Retrieve(frame, 0);
-            
-            int k = 2;
-            double uniquenessThreshold = 0.8;
-            double hessianThresh = 300;
+            var frame = new Mat();
+            _capture.Retrieve(frame);
 
-            UMat uModelImage = frame.ToUMat(AccessType.Read);
+            // 1. get key points
+            var keyPoints = new VectorOfKeyPoint(_detector.Detect(frame));
+            _tempModel.SetKeyFeatures(_selectedFrameIndex, keyPoints);
 
-            //extract features from the object image
-            UMat modelDescriptors = new UMat();
+            // 2. get descripters
+            var descripters = new Mat();
+            _descripter.Compute(frame, keyPoints, descripters);
 
-            var keys = _detector.Detect(frame);
+            // draw keypoints
+            var imageFrame = new Mat();
+            Features2DToolbox.DrawKeypoints(frame, keyPoints, imageFrame, new Bgr(Color.DarkBlue),
+                Features2DToolbox.KeypointDrawType.NotDrawSinglePoints);
 
-            var keyPoints = new VectorOfKeyPoint(keys);
-            // surf.DetectAndCompute(uModelImage, null, keyPoints, modelDescriptors, true);
+            if (_selectedFrameIndex != 0)
+            {
+                var previousKeyFeatures = _tempModel.GetKeyFeatures(_selectedFrameIndex - 1);
+                var previousKeyDescripters = _previousDescripters;
 
-            Mat resultFrame = new Mat();
-            Features2DToolbox.DrawKeypoints(frame, keyPoints, resultFrame, new Bgr(0, 0, 255), Features2DToolbox.KeypointDrawType.DrawRichKeypoints);
+                // 3. compute all matches with previous frame
+                var matches = new VectorOfVectorOfDMatch();
+                var matcher = GetNativeMatcher(SelectedMatcher);
+                matcher.Add(previousKeyDescripters);
+                matcher.KnnMatch(descripters, matches, 1, null);
 
+                // 4. separate good matches
+                var currentKeys = keyPoints;
+                
+                double minLength = Double.MaxValue;
+                double maxLength = Double.MinValue;
+                for (int i = 0; i < matches.Size; i++)
+                {
+                    minLength = Math.Min(minLength, matches[i][0].Distance);
+                    maxLength = Math.Max(maxLength, matches[i][0].Distance);
+                }
 
-            PreviewImageSource = resultFrame;
+                for (int i = 0; i < matches.Size; i++)
+                {
+                    var match = matches[i][0];
+                    // separate wrong matches
+                    if (match.Distance < maxLength / 3)
+                    {
+                        var previousIndex = match.TrainIdx;
+                        var currentIndex = match.QueryIdx;
 
-//            using ()
-//            using (UMat uObservedImage = observedImage.ToUMat(AccessType.Read))
-//            {
-//
-//                watch = Stopwatch.StartNew();
-//
-//                // extract features from the observed image
-//                UMat observedDescriptors = new UMat();
-//                surfCPU.DetectAndCompute(uObservedImage, null, observedKeyPoints, observedDescriptors, false);
-//                BFMatcher matcher = new BFMatcher(DistanceType.L2);
-//                matcher.Add(modelDescriptors);
-//
-//                matcher.KnnMatch(observedDescriptors, matches, k, null);
-//                mask = new Mat(matches.Size, 1, DepthType.Cv8U, 1);
-//                mask.SetTo(new MCvScalar(255));
-//                Features2DToolbox.VoteForUniqueness(matches, uniquenessThreshold, mask);
-//
-//                int nonZeroCount = CvInvoke.CountNonZero(mask);
-//                if (nonZeroCount >= 4)
-//                {
-//                    nonZeroCount = Features2DToolbox.VoteForSizeAndOrientation(modelKeyPoints, observedKeyPoints,
-//                       matches, mask, 1.5, 20);
-//                    if (nonZeroCount >= 4)
-//                        homography = Features2DToolbox.GetHomographyMatrixFromMatchedFeatures(modelKeyPoints,
-//                           observedKeyPoints, matches, mask, 2);
-//                }
-//
-//                watch.Stop();
-//            }
-            SelectedFrameIndex++;
-            if (SelectedFrameIndex == FramesCount)
+                        var previousPoint = previousKeyFeatures[previousIndex].Point;
+                        var currentPoint = currentKeys[currentIndex].Point;
+
+                        _tempModel.Unite(_selectedFrameIndex - 1, previousIndex,
+                            _selectedFrameIndex, currentIndex);
+
+                        CvInvoke.Line(imageFrame,
+                            Point.Round(previousPoint),
+                            Point.Round(currentPoint),
+                            new Bgr(Color.Red).MCvScalar,
+                            2);
+                    }
+                }
+            }
+
+            _previousDescripters = descripters;
+
+            PreviewImageSource = imageFrame;
+
+            _selectedFrameIndex++;
+            RaisePropertyChanged("Progress");
+            RaisePropertyChanged("ProgressText");
+            if (_selectedFrameIndex == _framesCount)
             {
                 GeneratingStates = FeatureGeneratingStates.Finished;
             }
@@ -165,7 +184,6 @@ namespace VideoFeatureMatching.ViewModels
             {
                 if (value == _selectedMatcher) return;
                 _selectedMatcher = value;
-                _matcher = GetNativeMatcher(value);
                 RaisePropertyChanged();
             }
         }
@@ -196,11 +214,15 @@ namespace VideoFeatureMatching.ViewModels
                     _capture = new Capture(VideoPath);
                     _capture.ImageGrabbed += CaptureOnImageGrabbed;
 
-                    SelectedFrameIndex = 0;
-                    FramesCount = (int)_capture.GetCaptureProperty(CapProp.FrameCount);
+                    _selectedFrameIndex = 0;
+                    _framesCount = (int)_capture.GetCaptureProperty(CapProp.FrameCount);
 
+                    _tempModel = new FeatureVideoModel(VideoPath, _framesCount);
                     _capture.Start();
+
                     GeneratingStates = FeatureGeneratingStates.Processing;
+                    RaisePropertyChanged("Progress");
+                    RaisePropertyChanged("ProgressText");
                 }, () => IsVideoSelected && GeneratingStates != FeatureGeneratingStates.Processing);
             }
         }
@@ -239,7 +261,7 @@ namespace VideoFeatureMatching.ViewModels
 
         #region Progress handlers
 
-        public double Progress { get { return FramesCount == 0 ? 0 : (double)SelectedFrameIndex/FramesCount; }}
+        public double Progress { get { return _framesCount == 0 ? 0 : (double)_selectedFrameIndex / _framesCount; } }
 
         public string ProgressText { get { return (int)(Progress*100) + "%"; } }
 
@@ -273,34 +295,6 @@ namespace VideoFeatureMatching.ViewModels
 
         #endregion
 
-        #region Private properties
-
-        private int FramesCount
-        {
-            get { return _framesCount; }
-            set
-            {
-                if (value == _framesCount) return;
-                _framesCount = value;
-                RaisePropertyChanged("Progress");
-                RaisePropertyChanged("ProgressText");
-            }
-        }
-
-        private int SelectedFrameIndex
-        {
-            get { return _selectedFrameIndex; }
-            set
-            {
-                if (value == _selectedFrameIndex) return;
-                _selectedFrameIndex = value;
-                RaisePropertyChanged("Progress");
-                RaisePropertyChanged("ProgressText");
-            }
-        }
-
-        #endregion
-
         #region Private
 
         private Feature2D GetNativeDetector(Detectors detectors)
@@ -313,6 +307,8 @@ namespace VideoFeatureMatching.ViewModels
                     return new FastDetector();
                 case Detectors.ORB:
                     return new ORBDetector();
+                case Detectors.Sift:
+                    return new SIFT();
                 default:
                     throw new ArgumentException("Don't know type " + detectors);
             }
@@ -339,8 +335,8 @@ namespace VideoFeatureMatching.ViewModels
             {
                 case Matchers.BFL2:
                     return new BFMatcher(DistanceType.L2);
-                case Matchers.BFL2Sqr:
-                    return new BFMatcher(DistanceType.L2Sqr);
+                case Matchers.Hamming:
+                    return new BFMatcher(DistanceType.Hamming);
                 default:
                     throw new ArgumentException("Don't know type " + matcher);
             }

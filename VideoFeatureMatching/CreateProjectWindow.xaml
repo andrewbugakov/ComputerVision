@@ -31,6 +31,7 @@
                 <ComboBoxItem Content="{x:Static l10N:Strings.Detector1}"/>
                 <ComboBoxItem Content="{x:Static l10N:Strings.Detector2}"/>
                 <ComboBoxItem Content="{x:Static l10N:Strings.Detector3}"/>
+                <ComboBoxItem Content="{x:Static l10N:Strings.Detector4}"/>
             </ComboBox>
             <TextBlock Text="{x:Static l10N:Strings.DescripterLabel}" Margin="5,5,5,0"/>
             <ComboBox SelectedIndex="{Binding SelectedDescripter, Converter={converters:DescripterConverter}, Mode=TwoWay}" Margin="5">

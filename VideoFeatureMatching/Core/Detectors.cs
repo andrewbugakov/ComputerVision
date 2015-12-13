@@ -4,6 +4,7 @@
     {
         Surf,
         Fast,
-        ORB
+        ORB,
+        Sift
     }
 }
