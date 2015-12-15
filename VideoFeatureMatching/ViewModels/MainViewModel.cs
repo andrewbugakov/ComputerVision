@@ -10,9 +10,9 @@ namespace VideoFeatureMatching.ViewModels
 {
     public class MainViewModel : BaseViewModel
     {
-        private readonly FileAccessor<FeatureVideoModel> _fileAccessor = new FileAccessor<FeatureVideoModel>();
+        private readonly VideoCloudPointsFileAccessor _baseFileAccessor = new VideoCloudPointsFileAccessor();
 
-        private ProjectFile<FeatureVideoModel> _projectFile;
+        private ProjectFile<VideoCloudPoints> _projectFile;
 
         #region General Properties
 
@@ -29,16 +29,16 @@ namespace VideoFeatureMatching.ViewModels
             }
         }
 
-        public Command OpenAboutCommmad { get { return new Command(() => new About().Show()); } }
+        public Command OpenAboutCommmand { get { return new Command(() => new About().Show()); } }
 
-        public Command ExitCommmad
+        public Command<Window> ExitCommand
         {
             get
             {
-                return new Command(() =>
+                return new Command<Window>(window =>
                 {
                     SaveExistingProjectIfNeeded();
-                    Environment.Exit(0);
+                    window.Close();
                 });
             }
         }
@@ -50,7 +50,7 @@ namespace VideoFeatureMatching.ViewModels
         public bool IsProjectOpened { get { return _projectFile != null; } }
         public bool IsProjectSaved { get { return _projectFile != null && _projectFile.IsSaved; } }
 
-        private void OpenProject(ProjectFile<FeatureVideoModel> projectFile)
+        private void OpenProject(ProjectFile<VideoCloudPoints> projectFile)
         {
             _projectFile = projectFile;
             _projectFile.ProjectSaved += ProjectFileOnProjectSaved;
@@ -89,7 +89,7 @@ namespace VideoFeatureMatching.ViewModels
         public Command CreateProjectCommand { get { return new Command(CreateProject); } }
         public Command SaveProjectCommand { get { return new Command(SaveProject, () => IsProjectOpened && !IsProjectSaved); } }
         public Command SaveAsProjectCommand { get { return new Command(SaveAsProject, () => IsProjectOpened); } }
-        public Command LoadProjectCommand { get { return new Command(LoadProject); } }
+        public Command OpenProjectCommand { get { return new Command(OpenProject); } }
         public Command CloseProjectCommand { get { return new Command(CloseProject, () => IsProjectOpened); } }
 
         #endregion
@@ -117,22 +117,22 @@ namespace VideoFeatureMatching.ViewModels
 
         private void SaveProject()
         {
-            _fileAccessor.Save(_projectFile);
+            _baseFileAccessor.Save(_projectFile);
         }
 
         private void SaveAsProject()
         {
-            _fileAccessor.SaveAs(_projectFile);
+            _baseFileAccessor.SaveAs(_projectFile);
         }
 
-        private void LoadProject()
+        private void OpenProject()
         {
             try
             {
                 if (SaveExistingProjectIfNeeded() == MessageBoxResult.Cancel)
                     return;
 
-                var project = _fileAccessor.Open();
+                var project = _baseFileAccessor.Open();
                 OpenProject(project);
             }
             // TODO better handlers

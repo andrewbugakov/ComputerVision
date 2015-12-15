@@ -32,7 +32,7 @@ namespace VideoFeatureMatching.ViewModels
         private Descripters _selectedDescripter;
         private Matchers _selectedMatcher;
         private string _videoPath;
-        private FeatureVideoModel _tempModel;
+        private VideoCloudPoints _tempCloudPoints;
         private int _framesCount;
         private int _selectedFrameIndex;
         private FeatureGeneratingStates _generatingStates;
@@ -52,7 +52,7 @@ namespace VideoFeatureMatching.ViewModels
 
             // 1. get key points
             var keyPoints = new VectorOfKeyPoint(_detector.Detect(frame));
-            _tempModel.SetKeyFeatures(_selectedFrameIndex, keyPoints);
+            _tempCloudPoints.SetKeyFeatures(_selectedFrameIndex, keyPoints);
 
             // 2. get descripters
             var descripters = new Mat();
@@ -65,7 +65,7 @@ namespace VideoFeatureMatching.ViewModels
 
             if (_selectedFrameIndex != 0)
             {
-                var previousKeyFeatures = _tempModel.GetKeyFeatures(_selectedFrameIndex - 1);
+                var previousKeyFeatures = _tempCloudPoints.GetKeyFeatures(_selectedFrameIndex - 1);
                 var previousKeyDescripters = _previousDescripters;
 
                 // 3. compute all matches with previous frame
@@ -97,7 +97,7 @@ namespace VideoFeatureMatching.ViewModels
                         var previousPoint = previousKeyFeatures[previousIndex].Point;
                         var currentPoint = currentKeys[currentIndex].Point;
 
-                        _tempModel.Unite(_selectedFrameIndex - 1, previousIndex,
+                        _tempCloudPoints.Unite(_selectedFrameIndex - 1, previousIndex,
                             _selectedFrameIndex, currentIndex);
 
                         CvInvoke.Line(imageFrame,
@@ -122,10 +122,10 @@ namespace VideoFeatureMatching.ViewModels
             }
         }
 
-        public ProjectFile<FeatureVideoModel> GetProjectFile()
+        public ProjectFile<VideoCloudPoints> GetProjectFile()
         {
             return GeneratingStates == FeatureGeneratingStates.Finished 
-                ? new ProjectFile<FeatureVideoModel>(_tempModel) 
+                ? new ProjectFile<VideoCloudPoints>(_tempCloudPoints) 
                 : null;
         }
 
@@ -217,7 +217,7 @@ namespace VideoFeatureMatching.ViewModels
                     _selectedFrameIndex = 0;
                     _framesCount = (int)_capture.GetCaptureProperty(CapProp.FrameCount);
 
-                    _tempModel = new FeatureVideoModel(VideoPath, _framesCount);
+                    _tempCloudPoints = new VideoCloudPoints(VideoPath, _framesCount);
                     _capture.Start();
 
                     GeneratingStates = FeatureGeneratingStates.Processing;

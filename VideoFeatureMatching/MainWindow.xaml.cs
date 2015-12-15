@@ -33,7 +33,7 @@ namespace VideoFeatureMatching
 
 //            Closing += (sender, args) =>
 //            {
-//                ViewModel.ExitCommmad.Execute();
+//                ViewModel.ExitCommand.Execute();
 //            };
         }
 

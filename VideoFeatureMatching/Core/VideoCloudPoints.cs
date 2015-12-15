@@ -1,22 +1,28 @@
-﻿using Emgu.CV;
+﻿using System;
+using System.Collections.Generic;
+using Emgu.CV;
 using Emgu.CV.Util;
+using VideoFeatureMatching.DataStructures;
 
 namespace VideoFeatureMatching.Core
 {
-    public class FeatureVideoModel
+    public class VideoCloudPoints
     {
-        private readonly int _frameCount;
         private readonly VectorOfKeyPoint[] _vectorOfKeyPoints;
+        private readonly DisjointSetUnion _disjointSetUnion;
         private readonly string _videoPath;
+        private readonly int _frameCount;
 
-        public FeatureVideoModel(string videoPath, int frameCount)
+        public VideoCloudPoints(string videoPath, int frameCount)
         {
             _frameCount = frameCount;
             _videoPath = videoPath;
             _vectorOfKeyPoints = new VectorOfKeyPoint[frameCount];
+            _disjointSetUnion = new DisjointSetUnion(frameCount);
         }
 
         public string VideoPath { get { return _videoPath; } }
+        public int FrameCount { get { return _frameCount; } }
 
         public void SetKeyFeatures(int frameIndex, VectorOfKeyPoint keyPoints)
         {
@@ -30,7 +36,16 @@ namespace VideoFeatureMatching.Core
 
         public void Unite(int frameIndexA, int keyIndexA, int frameIndexB, int keyIndexB)
         {
-            // TODO unite!!
+            _disjointSetUnion.Unit(frameIndexA, keyIndexA, frameIndexB, keyIndexB);
+        }
+
+        /// <summary>
+        /// Returns unique sequences of matches
+        /// </summary>
+        /// <returns></returns>
+        public List<Tuple<int, int>>[] GetMatchesArrays()
+        {
+            return _disjointSetUnion.GetUnitPoints();
         }
     }
 }

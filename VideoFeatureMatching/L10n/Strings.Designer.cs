@@ -442,6 +442,15 @@ namespace VideoFeatureMatching.L10n {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Video point cloud features (*.vpcf) | *.vpcf.
+        /// </summary>
+        public static string ProjectExtenstion {
+            get {
+                return ResourceManager.GetString("ProjectExtenstion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Ready.
         /// </summary>
         public static string Ready {

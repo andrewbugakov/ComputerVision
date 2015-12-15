@@ -89,14 +89,16 @@
     <Compile Include="Converters\MatherConverter.cs" />
     <Compile Include="Core\Detectors.cs" />
     <Compile Include="Core\Descripters.cs" />
-    <Compile Include="Core\FeatureVideoModel.cs" />
+    <Compile Include="Core\VideoCloudPoints.cs" />
     <Compile Include="Core\Matchers.cs" />
     <Compile Include="Core\VideoFileUtils.cs" />
     <Compile Include="CreateProjectWindow.xaml.cs">
       <DependentUpon>CreateProjectWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DAL\FileAccessor.cs" />
+    <Compile Include="DAL\BaseFileAccessor.cs" />
     <Compile Include="DAL\ProjectFile.cs" />
+    <Compile Include="DAL\VideoCloudPointsFileAccessor.cs" />
+    <Compile Include="DataStructures\DisjointSetUnion.cs" />
     <Compile Include="L10n\Strings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
