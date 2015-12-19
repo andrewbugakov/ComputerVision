@@ -1,23 +1,15 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
 using System.Windows;
-using System.Windows.Media;
 using Emgu.CV;
-using Emgu.CV.Cuda;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.CV.XFeatures2D;
-using Microsoft.Win32;
 using VideoFeatureMatching.Core;
 using VideoFeatureMatching.DAL;
-using VideoFeatureMatching.L10n;
 using VideoFeatureMatching.Utils;
-using Color = System.Drawing.Color;
-using DescriptorMatcher = Emgu.CV.Features2D.DescriptorMatcher;
 using Point = System.Drawing.Point;
 
 namespace VideoFeatureMatching.ViewModels
@@ -67,36 +59,42 @@ namespace VideoFeatureMatching.ViewModels
 
             if (_selectedFrameIndex != 0)
             {
-                var previousKeyFeatures = _tempCloudPoints.GetKeyFeatures(_selectedFrameIndex - 1);
+                var previousKeyPoints = _tempCloudPoints.GetKeyFeatures(_selectedFrameIndex - 1);
                 var previousKeyDescripters = _previousDescripters;
+
+                const int k = 2;
+                const double uniquenessThreshold = 0.8;
 
                 // 3. compute all matches with previous frame
                 var matches = new VectorOfVectorOfDMatch();
                 var matcher = GetNativeMatcher(SelectedMatcher);
                 matcher.Add(previousKeyDescripters);
-                matcher.KnnMatch(descripters, matches, 1, null);
+
+                matcher.KnnMatch(descripters, matches, k, null);
+
+                var mask = new Mat(matches.Size, 1, DepthType.Cv8U, 1);
+                mask.SetTo(new MCvScalar(255));
+                Features2DToolbox.VoteForUniqueness(matches, uniquenessThreshold, mask);
+                Features2DToolbox.VoteForSizeAndOrientation(previousKeyPoints, keyPoints,
+                       matches, mask, 1.5, 20);
+                Features2DToolbox.GetHomographyMatrixFromMatchedFeatures(previousKeyPoints,
+                            keyPoints, matches, mask, 2);
+
+                var managedMask = mask.GetData();
 
                 // 4. separate good matches
                 var currentKeys = keyPoints;
-                
-                double minLength = Double.MaxValue;
-                double maxLength = Double.MinValue;
-                for (int i = 0; i < matches.Size; i++)
-                {
-                    minLength = Math.Min(minLength, matches[i][0].Distance);
-                    maxLength = Math.Max(maxLength, matches[i][0].Distance);
-                }
 
                 for (int i = 0; i < matches.Size; i++)
                 {
                     var match = matches[i][0];
-                    // separate wrong matches
-                    if (match.Distance < maxLength / 3)
+                    // filter wrong matches
+                    if (managedMask[i] == 1)
                     {
                         var previousIndex = match.TrainIdx;
                         var currentIndex = match.QueryIdx;
 
-                        var previousPoint = previousKeyFeatures[previousIndex].Point;
+                        var previousPoint = previousKeyPoints[previousIndex].Point;
                         var currentPoint = currentKeys[currentIndex].Point;
 
                         _tempCloudPoints.Unite(_selectedFrameIndex - 1, previousIndex,
