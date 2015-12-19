@@ -82,11 +82,17 @@
     <Compile Include="AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\AndMultiConverter.cs" />
     <Compile Include="Converters\BaseConverter.cs" />
+    <Compile Include="Converters\BaseMultiConverter.cs" />
+    <Compile Include="Converters\CombiningConverter .cs" />
     <Compile Include="Converters\DescripterConverter.cs" />
     <Compile Include="Converters\DetectorConverter.cs" />
     <Compile Include="Converters\EmguImageConverter.cs" />
+    <Compile Include="Converters\EnumEqualConverter.cs" />
     <Compile Include="Converters\MatherConverter.cs" />
+    <Compile Include="Converters\NotConverter.cs" />
+    <Compile Include="Converters\PlayPauseImageSourceConverter.cs" />
     <Compile Include="Core\Detectors.cs" />
     <Compile Include="Core\Descripters.cs" />
     <Compile Include="Core\VideoCloudPoints.cs" />
@@ -118,6 +124,7 @@
     <Compile Include="ViewModels\FeatureGeneratingStates.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="Utils\BitmapSourceConvertExtention.cs" />
+    <Compile Include="Core\PlayerStates.cs" />
     <Page Include="AboutWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -183,6 +190,9 @@
     <Folder Include="Controls\" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Assets\ic_launch.png" />
+    <Resource Include="Assets\ic_pause.png" />
+    <Resource Include="Assets\ic_stop.png" />
     <Content Include="x64\cvextern.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

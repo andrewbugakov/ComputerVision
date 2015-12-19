@@ -1,6 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Threading;
 using System.Windows;
+using System.Windows.Input;
+using Emgu.CV;
+using Emgu.CV.CvEnum;
 using VideoFeatureMatching.Core;
 using VideoFeatureMatching.DAL;
 using VideoFeatureMatching.L10n;
@@ -13,6 +17,17 @@ namespace VideoFeatureMatching.ViewModels
         private readonly VideoCloudPointsFileAccessor _baseFileAccessor = new VideoCloudPointsFileAccessor();
 
         private ProjectFile<VideoCloudPoints> _projectFile;
+
+        private Capture _capture;
+        private string _progressTime;
+        private PlayerStates _playerState;
+        private double _progress;
+        private IImage _videoImageSource;
+
+        public MainViewModel()
+        {
+            _playerState = PlayerStates.Stopped;
+        }
 
         #region General Properties
 
@@ -53,33 +68,38 @@ namespace VideoFeatureMatching.ViewModels
         private void OpenProject(ProjectFile<VideoCloudPoints> projectFile)
         {
             _projectFile = projectFile;
-            _projectFile.ProjectSaved += ProjectFileOnProjectSaved;
 
             RaisePropertyChanged("IsProjectOpened");
             RaisePropertyChanged("IsProjectSaved");
+
             RaisePropertyChanged("SaveProjectCommand");
             RaisePropertyChanged("SaveAsProjectCommand");
             RaisePropertyChanged("CloseProjectCommand");
-        }
 
-        private void ProjectFileOnProjectSaved(object sender, EventArgs eventArgs)
-        {
-            RaisePropertyChanged("IsProjectSaved");
-            RaisePropertyChanged("SaveProjectCommand");
+            _capture = new Capture(projectFile.Model.VideoPath);
+            _capture.ImageGrabbed += CaptureOnImageGrabbed;
+
+            Progress = 0;
+            RaisePropertyChanged("PlayPauseCommand");
+            RaisePropertyChanged("StopCommand");
         }
 
         private void CloseProject()
         {
-            if (_projectFile != null)
-            {
-                _projectFile.ProjectSaved -= ProjectFileOnProjectSaved;
-            }
             _projectFile = null;
             RaisePropertyChanged("IsProjectOpened");
             RaisePropertyChanged("IsProjectSaved");
+            
             RaisePropertyChanged("SaveProjectCommand");
             RaisePropertyChanged("SaveAsProjectCommand");
             RaisePropertyChanged("CloseProjectCommand");
+
+            _capture.ImageGrabbed -= CaptureOnImageGrabbed;
+            _capture.Dispose();
+            _capture = null;
+
+            RaisePropertyChanged("PlayPauseCommand");
+            RaisePropertyChanged("StopCommand");
         }
 
         #endregion
@@ -133,7 +153,10 @@ namespace VideoFeatureMatching.ViewModels
                     return;
 
                 var project = _baseFileAccessor.Open();
-                OpenProject(project);
+                if (project != null)
+                {
+                    OpenProject(project);
+                }
             }
             // TODO better handlers
             catch (Exception e)
@@ -154,6 +177,118 @@ namespace VideoFeatureMatching.ViewModels
                 return result;
             }
             return MessageBoxResult.Yes;
+        }
+
+        #endregion
+
+        #region Player Properties
+
+        public PlayerStates PlayerState
+        {
+            get { return _playerState; }
+            private set
+            {
+                if (value == _playerState) return;
+                _playerState = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public ICommand PlayPauseCommand { get { return new Command(PlayPause, () => IsProjectOpened); } }
+        public ICommand StopCommand { get { return new Command(Stop, () => IsProjectOpened); } }
+
+        public string ProgressTime
+        {
+            get { return _progressTime; }
+            private set
+            {
+                if (value == _progressTime) return;
+                _progressTime = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public double Progress
+        {
+            get { return _progress; }
+            set
+            {
+                _progress = value;
+                var frameCount = _capture.GetCaptureProperty(CapProp.FrameCount);
+                _capture.SetCaptureProperty(CapProp.PosFrames, value * frameCount);
+            }
+        }
+
+        public IImage VideoImageSource
+        {
+            get { return _videoImageSource; }
+            set
+            {
+                if (Equals(value, _videoImageSource)) return;
+                _videoImageSource = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        #endregion
+
+        #region Player methods
+
+        private void CaptureOnImageGrabbed(object sender, EventArgs eventArgs)
+        {
+            var capture = (Capture) sender;
+
+            //Show image
+            var frame = new Mat();
+            _capture.Retrieve(frame);
+            VideoImageSource = frame;
+
+            //Show time stamp
+            double timeIndex = capture.GetCaptureProperty(CapProp.PosMsec);
+            ProgressTime = TimeSpan.FromMilliseconds(timeIndex).ToString("g");
+
+            //show frame number
+            double framenumber = capture.GetCaptureProperty(CapProp.PosFrames);
+            double totalFrames = capture.GetCaptureProperty(CapProp.FrameCount);
+            _progress = framenumber / totalFrames;
+            RaisePropertyChanged("Progress");
+
+            /*Note: We can increase or decrease this delay to fastforward of slow down the display rate
+             if we want a re-wind function we would have to use _Capture.SetCaptureProperty(Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES, FrameNumber*);
+            //and call the process frame to update the picturebox ProcessFrame(null, null);. This is more complicated.*/
+
+            //Wait to display correct framerate
+            var frameRate = capture.GetCaptureProperty(CapProp.Fps);
+            Thread.Sleep((int)(1000.0 / frameRate)); //This may result in fast playback if the codec does not tell the truth
+
+            //Lets check to see if we have reached the end of the video
+            //If we have lets stop the capture and video as in pause button was pressed
+            //and reset the video back to start
+            if (framenumber == totalFrames)
+            {
+                Stop();
+            }
+        }
+
+        private void PlayPause()
+        {
+            if (PlayerState == PlayerStates.Playing)
+            {
+                _capture.Pause();
+                PlayerState = PlayerStates.Paused;
+            }
+            else
+            {
+                _capture.Start();
+                PlayerState = PlayerStates.Playing;
+            }
+        }
+
+        private void Stop()
+        {
+            _capture.Stop();
+            Progress = 0;
+            PlayerState = PlayerStates.Stopped;
         }
 
         #endregion

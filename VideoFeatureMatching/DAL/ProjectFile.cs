@@ -19,8 +19,5 @@ namespace VideoFeatureMatching.DAL
         public TModel Model { get; private set; }
         public string Path { get; set; }
         public bool IsSaved { get; set; }
-        
-        [Obsolete("NOT IN USE! DELETE ME!")]
-        public event EventHandler ProjectSaved;
     }
 }
