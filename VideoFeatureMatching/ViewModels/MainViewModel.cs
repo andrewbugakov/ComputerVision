@@ -1,14 +1,18 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Drawing;
 using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
+using Emgu.CV.Features2D;
+using Emgu.CV.Structure;
 using VideoFeatureMatching.Core;
 using VideoFeatureMatching.DAL;
 using VideoFeatureMatching.L10n;
 using VideoFeatureMatching.Utils;
+using Point = System.Drawing.Point;
 
 namespace VideoFeatureMatching.ViewModels
 {
@@ -95,7 +99,6 @@ namespace VideoFeatureMatching.ViewModels
             RaisePropertyChanged("CloseProjectCommand");
 
             _capture.ImageGrabbed -= CaptureOnImageGrabbed;
-            _capture.Dispose();
             _capture = null;
 
             RaisePropertyChanged("PlayPauseCommand");
@@ -238,33 +241,45 @@ namespace VideoFeatureMatching.ViewModels
         {
             var capture = (Capture) sender;
 
-            //Show image
-            var frame = new Mat();
-            _capture.Retrieve(frame);
-            VideoImageSource = frame;
-
             //Show time stamp
             double timeIndex = capture.GetCaptureProperty(CapProp.PosMsec);
             ProgressTime = TimeSpan.FromMilliseconds(timeIndex).ToString("g");
 
             //show frame number
-            double framenumber = capture.GetCaptureProperty(CapProp.PosFrames);
+            double frameNumber = capture.GetCaptureProperty(CapProp.PosFrames);
             double totalFrames = capture.GetCaptureProperty(CapProp.FrameCount);
-            _progress = framenumber / totalFrames;
+            _progress = frameNumber / totalFrames;
             RaisePropertyChanged("Progress");
 
-            /*Note: We can increase or decrease this delay to fastforward of slow down the display rate
-             if we want a re-wind function we would have to use _Capture.SetCaptureProperty(Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES, FrameNumber*);
-            //and call the process frame to update the picturebox ProcessFrame(null, null);. This is more complicated.*/
+            // Show image with keyPoints
+            var frame = new Mat();
+            _capture.Retrieve(frame);
+            var keyFeatures = _projectFile.Model.GetKeyFeatures((int)frameNumber - 1);
+
+            var imageFrame = new Mat();
+            Features2DToolbox.DrawKeypoints(frame, keyFeatures, imageFrame, new Bgr(Color.DarkBlue),
+                Features2DToolbox.KeypointDrawType.NotDrawSinglePoints);
+
+            if (frameNumber > 1)
+            {
+                var matches = _projectFile.Model.GetMatches((int) frameNumber - 1);
+                foreach (var match in matches)
+                {
+                    CvInvoke.Line(imageFrame,
+                        Point.Round(match.Item1.Point),
+                        Point.Round(match.Item2.Point),
+                        new Bgr(Color.Red).MCvScalar,
+                        2);
+                }
+            }
+
+            VideoImageSource = imageFrame;
 
             //Wait to display correct framerate
             var frameRate = capture.GetCaptureProperty(CapProp.Fps);
             Thread.Sleep((int)(1000.0 / frameRate)); //This may result in fast playback if the codec does not tell the truth
 
-            //Lets check to see if we have reached the end of the video
-            //If we have lets stop the capture and video as in pause button was pressed
-            //and reset the video back to start
-            if (framenumber == totalFrames)
+            if (frameNumber == totalFrames)
             {
                 Stop();
             }

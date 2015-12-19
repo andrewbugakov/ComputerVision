@@ -8,11 +8,13 @@ namespace VideoFeatureMatching.DataStructures
     // Idea got from http://e-maxx.ru/algo/dsu
     public class DisjointSetUnion
     {
-        private readonly Dictionary<Point, Point>[] _sets; 
+        private readonly Dictionary<Point, Point>[] _sets;
+        private readonly Dictionary<Point, HashSet<Point>> _values; 
 
         public DisjointSetUnion(int layers)
         {
             _sets = new Dictionary<Point, Point>[layers];
+            _values = new Dictionary<Point, HashSet<Point>>();
         }
 
         private Point FindSet(Point point)
@@ -25,7 +27,7 @@ namespace VideoFeatureMatching.DataStructures
             else
             {
                 var set = dictionary[point];
-                if (set == point) return point;
+                if (Equals(set, point)) return point;
                 else
                 {
                     var newSet = FindSet(set);
@@ -35,10 +37,29 @@ namespace VideoFeatureMatching.DataStructures
             }
         }
 
-        private void MakeSet(Point point, Point set)
+        private void MakeSet(Point setA, Point setB)
         {
-            var dictionary = _sets[point.X] ?? (_sets[point.X] = new Dictionary<Point, Point>());
-            dictionary[point] = set;
+            setA = FindSet(setA);
+            setB = FindSet(setB);
+
+            if (Equals(setA, setB))
+                return;
+
+            var dictionary = _sets[setA.X] ?? (_sets[setA.X] = new Dictionary<Point, Point>());
+            dictionary[setA] = setB;
+
+            var newValues = _values.ContainsKey(setB) ? _values[setB] : (_values[setB] = new HashSet<Point>());
+            newValues.Add(setA);
+            newValues.Add(setB);
+
+            if (_values.ContainsKey(setA))
+            {
+                foreach (var value in _values[setA])
+                {
+                    newValues.Add(value);
+                }
+                _values.Remove(setA);
+            }
         }
 
         public void Unit(int layerA, int indexA, int layerB, int indexB)
@@ -46,14 +67,19 @@ namespace VideoFeatureMatching.DataStructures
             var pointA = new Point(layerA, indexA);
             var pointB = new Point(layerB, indexB);
 
-            var setA = FindSet(pointA);
-            var setB = FindSet(pointB);
+            MakeSet(pointB, pointA);
+        }
 
-            if (setA != setB)
+        public IEnumerable<Tuple<int, int>> GetChain(int layer, int index)
+        {
+            var pointA = new Point(layer, index);
+            var set = FindSet(pointA);
+
+            if (_values.ContainsKey(set))
             {
-                MakeSet(setB, setB);
-                MakeSet(setA, setB);
+                return _values[set].Select(point => Tuple.Create(point.X, point.Y));
             }
+            return null;
         }
 
         /// <summary>
@@ -65,32 +91,60 @@ namespace VideoFeatureMatching.DataStructures
         /// <returns></returns>
         public List<Tuple<int, int>>[] GetUnitPoints()
         {
-            var dictionary = new Dictionary<Point, List<Point>>();
-
-            foreach (var pointDictionary in _sets)
-            {
-                foreach (var point in pointDictionary.Keys.ToList())
-                {
-                    var set = FindSet(point);
-                    var list = dictionary.ContainsKey(set) ? dictionary[set] : (dictionary[set] = new List<Point>());
-
-                    list.Add(point);
-                }
-            }
-
-            return dictionary.Values.Select(lists => lists.Select(point => new Tuple<int, int>(point.X, point.Y)).ToList()).ToArray();
+            return
+                _values.Values
+                .Select(value => value
+                    .Select(point => new Tuple<int, int>(point.X, point.Y))
+                    .ToList())
+                .ToArray();
         }
 
         [DebuggerDisplay("X:{X} Y:{Y}")]
         private class Point
         {
-            public int X { get; set; }
-            public int Y { get; set; }
+            public int X { get; private set; }
+            public int Y { get; private set; }
 
             public Point(int x, int y)
             {
                 X = x;
                 Y = y;
+            }
+
+            public override bool Equals(System.Object obj)
+            {
+                // If parameter is null return false.
+                if (obj == null)
+                {
+                    return false;
+                }
+
+                // If parameter cannot be cast to Point return false.
+                var p = obj as Point;
+                if ((System.Object)p == null)
+                {
+                    return false;
+                }
+
+                // Return true if the fields match:
+                return (X == p.X) && (Y == p.Y);
+            }
+
+            public bool Equals(Point p)
+            {
+                // If parameter is null return false:
+                if ((object)p == null)
+                {
+                    return false;
+                }
+
+                // Return true if the fields match:
+                return (X == p.X) && (Y == p.Y);
+            }
+
+            public override int GetHashCode()
+            {
+                return X ^ Y;
             }
         }
     }

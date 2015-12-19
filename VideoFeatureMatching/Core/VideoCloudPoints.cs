@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Emgu.CV;
+using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using VideoFeatureMatching.DataStructures;
 
@@ -37,6 +39,29 @@ namespace VideoFeatureMatching.Core
         public void Unite(int frameIndexA, int keyIndexA, int frameIndexB, int keyIndexB)
         {
             _disjointSetUnion.Unit(frameIndexA, keyIndexA, frameIndexB, keyIndexB);
+        }
+
+        public List<Tuple<MKeyPoint, MKeyPoint>> GetMatches(int frameIndex)
+        {
+            var currentKeys = GetKeyFeatures(frameIndex);
+            var previousKeys = GetKeyFeatures(frameIndex - 1);
+
+            var result = new List<Tuple<MKeyPoint, MKeyPoint>>();
+
+            for (int i = 0; i < currentKeys.Size; i++)
+            {
+                var chain = _disjointSetUnion.GetChain(frameIndex, i);
+                if (chain != null)
+                {
+                    var pair = chain.FirstOrDefault(t => t.Item1 == frameIndex - 1);
+                    if (pair != null)
+                    {
+                        result.Add(Tuple.Create(currentKeys[i], previousKeys[pair.Item2]));
+                    }
+                }
+            }
+
+            return result;
         }
 
         /// <summary>

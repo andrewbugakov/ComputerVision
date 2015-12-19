@@ -47,8 +47,10 @@ namespace VideoFeatureMatching.ViewModels
 
         private void CaptureOnImageGrabbed(object sender, EventArgs eventArgs)
         {
+            var capture = (Capture) sender;
+
             var frame = new Mat();
-            _capture.Retrieve(frame);
+            capture.Retrieve(frame);
 
             // 1. get key points
             var keyPoints = new VectorOfKeyPoint(_detector.Detect(frame));
@@ -276,6 +278,8 @@ namespace VideoFeatureMatching.ViewModels
                 return new Command<Window>(window =>
                 {
                     window.Close();
+                    _capture.Stop();
+                    _capture.ImageGrabbed -= CaptureOnImageGrabbed;
                 }, () => GeneratingStates == FeatureGeneratingStates.Finished);
             }
         }
@@ -286,6 +290,8 @@ namespace VideoFeatureMatching.ViewModels
             {
                 return new Command<Window>(window =>
                 {
+                    _capture.Stop();
+                    _capture.ImageGrabbed -= CaptureOnImageGrabbed;
                     window.Close();
                 });
             }

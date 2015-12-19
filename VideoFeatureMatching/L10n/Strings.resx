@@ -272,12 +272,15 @@
     <value>AVI|*.avi</value>
   </data>
   <data name="VideoExtenstion3" xml:space="preserve">
-    <value>CHANGE IT!!|*.avi3</value>
+    <value>Mov|*.mov</value>
   </data>
   <data name="Detector4" xml:space="preserve">
     <value>SIFT</value>
   </data>
   <data name="ProjectExtenstion" xml:space="preserve">
     <value>Video point cloud features (*.vpcf) | *.vpcf</value>
+  </data>
+  <data name="AllVideoExtensions" xml:space="preserve">
+    <value>All|*.mp4;*.avi;*.mov</value>
   </data>
 </root>

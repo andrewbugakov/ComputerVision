@@ -79,6 +79,15 @@ namespace VideoFeatureMatching.L10n {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на All|*.mp4;*.avi;*.mov.
+        /// </summary>
+        public static string AllVideoExtensions {
+            get {
+                return ResourceManager.GetString("AllVideoExtensions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Attention.
         /// </summary>
         public static string Attention {
@@ -532,7 +541,7 @@ namespace VideoFeatureMatching.L10n {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на CHANGE IT!!|*.avi3.
+        ///   Ищет локализованную строку, похожую на Mov|*.mov.
         /// </summary>
         public static string VideoExtenstion3 {
             get {

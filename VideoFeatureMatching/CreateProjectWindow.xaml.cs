@@ -35,7 +35,8 @@ namespace VideoFeatureMatching
         private void OpenVideoFile_OnClick(object sender, RoutedEventArgs e)
         {
             var openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = String.Format("{0}|{1}|{2}",
+            openFileDialog.Filter = String.Format("{0}|{1}|{2}|{3}",
+                Strings.AllVideoExtensions,
                 Strings.VideoExtenstion1,
                 Strings.VideoExtenstion2,
                 Strings.VideoExtenstion3);

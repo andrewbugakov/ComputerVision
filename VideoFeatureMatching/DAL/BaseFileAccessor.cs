@@ -42,7 +42,10 @@ namespace VideoFeatureMatching.DAL
             {
                 var path = fileDialog.FileName;
                 var model = ReadFrom(path);
-                return new ProjectFile<TModel>(model, path);
+                return new ProjectFile<TModel>(model, path)
+                {
+                    IsSaved = true
+                };
             }
             else
             {

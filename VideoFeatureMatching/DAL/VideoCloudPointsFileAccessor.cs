@@ -26,11 +26,11 @@ namespace VideoFeatureMatching.DAL
                         for (int j = 0; j < featureKeys.Size; j++)
                         {
                             var feature = featureKeys[j];
-                            stream.Write(feature.Angle);
-                            stream.Write(feature.ClassId);
-                            stream.Write(feature.Octave);
-                            stream.Write(feature.Response);
-                            stream.Write(feature.Size);
+                            // stream.Write(feature.Angle);
+                            // stream.Write(feature.ClassId);
+                            // stream.Write(feature.Octave);
+                            // stream.Write(feature.Response);
+                            // stream.Write(feature.Size);
                             stream.Write(feature.Point.X);
                             stream.Write(feature.Point.Y);
                         }
@@ -69,13 +69,13 @@ namespace VideoFeatureMatching.DAL
                         for (int j = 0; j < keysCount; j++)
                         {
                             var keyFeature = new MKeyPoint();
-                            keyFeature.Angle = stream.ReadSingle();
-                            keyFeature.ClassId = stream.ReadInt32();
-                            keyFeature.Octave = stream.ReadInt32();
-                            keyFeature.Response = stream.ReadSingle();
-                            keyFeature.Size = stream.ReadSingle();
+//                            keyFeature.Angle = stream.ReadSingle();
+//                            keyFeature.ClassId = stream.ReadInt32();
+//                            keyFeature.Octave = stream.ReadInt32();
+//                            keyFeature.Response = stream.ReadSingle();
+//                            keyFeature.Size = stream.ReadSingle();
                             keyFeature.Point = new PointF(stream.ReadSingle(), stream.ReadSingle());
-                            array[i] = keyFeature;
+                            array[j] = keyFeature;
                         }
                         videCloudPoints.SetKeyFeatures(i, new VectorOfKeyPoint(array));
                     }
