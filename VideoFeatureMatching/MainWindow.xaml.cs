@@ -43,5 +43,16 @@ namespace VideoFeatureMatching
             get { return (MainViewModel) DataContext; }
             set { DataContext = value; }
         }
+
+        private void VideoPlayer_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var frameworkElement = (FrameworkElement) sender;
+            var coordinates = e.GetPosition(frameworkElement);
+
+            var x = coordinates.X/frameworkElement.ActualWidth;
+            var y = coordinates.Y/frameworkElement.ActualHeight;
+
+            ViewModel.ShowPointInformation(x, y);
+        }
     }
 }

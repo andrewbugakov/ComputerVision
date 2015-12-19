@@ -22,8 +22,8 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="5*"/>
-            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Menu Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
             <MenuItem Header="{x:Static l10N:Strings.File}">
@@ -39,7 +39,7 @@
         </Menu>
 
         <!-- Player -->
-        <Grid Grid.Column="0" Grid.Row="1">
+        <Grid Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
@@ -50,7 +50,7 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Image x:Name="videoPlayer" Margin="5" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4" Source="{Binding VideoImageSource, Converter={StaticResource EmguImageConverter}}"/>
+            <Image x:Name="videoPlayer" Margin="5" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4" Source="{Binding VideoImageSource, Converter={StaticResource EmguImageConverter}}" MouseDown="VideoPlayer_MouseDown" />
             <Button Grid.Column="0" Grid.Row="1" Margin="5" Command="{Binding PlayPauseCommand}" >
                 <Image x:Name="playPauseButton" Width="20" Height="20" Source="{Binding PlayerState, Converter={StaticResource PlayPauseImageSourceConverter}}" />
             </Button>
@@ -65,7 +65,9 @@
                         <Binding Path="PlayerState" Converter="{StaticResource NegatedBoolToEnumConverter}" ConverterParameter="{x:Static core:PlayerStates.Playing}"/>
                     </MultiBinding>
                 </Slider.IsEnabled>
-                </Slider>
+            </Slider>
         </Grid>
+        <TextBlock Text="{Binding PointInformation}" Grid.Row="2" Grid.Column="0" />
+        <TextBlock Text="{Binding PointInformation}" Grid.Row="2" Grid.Column="1" />
     </Grid>
 </Window>

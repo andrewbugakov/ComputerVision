@@ -119,6 +119,7 @@
     <Compile Include="Services\MessageService.cs" />
     <Compile Include="Utils\Command.cs" />
     <Compile Include="Utils\Command.generic.cs" />
+    <Compile Include="Utils\VectorOfKeyPointExtenstions.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\CreateProjectViewModel.cs" />
     <Compile Include="ViewModels\FeatureGeneratingStates.cs" />

@@ -442,6 +442,18 @@ namespace VideoFeatureMatching.L10n {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Point
+        ///First frame: {0}
+        ///Current frame: {1}
+        ///Last frame: {2}.
+        /// </summary>
+        public static string PointInformationFormat {
+            get {
+                return ResourceManager.GetString("PointInformationFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Video feature mathing programm.
         /// </summary>
         public static string ProgramName {

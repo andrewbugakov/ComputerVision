@@ -283,4 +283,10 @@
   <data name="AllVideoExtensions" xml:space="preserve">
     <value>All|*.mp4;*.avi;*.mov</value>
   </data>
+  <data name="PointInformationFormat" xml:space="preserve">
+    <value>Point
+First frame: {0}
+Current frame: {1}
+Last frame: {2}</value>
+  </data>
 </root>

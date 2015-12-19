@@ -41,6 +41,11 @@ namespace VideoFeatureMatching.Core
             _disjointSetUnion.Unit(frameIndexA, keyIndexA, frameIndexB, keyIndexB);
         }
 
+        public IEnumerable<Tuple<int, int>> GetChain(int frameIndex, int keyIndex)
+        {
+            return _disjointSetUnion.GetChain(frameIndex, keyIndex) ?? new Tuple<int, int>[0];
+        }
+
         public List<Tuple<MKeyPoint, MKeyPoint>> GetMatches(int frameIndex)
         {
             var currentKeys = GetKeyFeatures(frameIndex);

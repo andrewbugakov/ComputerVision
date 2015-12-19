@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Drawing;
+using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Input;
@@ -8,6 +9,7 @@ using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
+using Emgu.CV.Util;
 using VideoFeatureMatching.Core;
 using VideoFeatureMatching.DAL;
 using VideoFeatureMatching.L10n;
@@ -27,6 +29,8 @@ namespace VideoFeatureMatching.ViewModels
         private PlayerStates _playerState;
         private double _progress;
         private IImage _videoImageSource;
+        private string _pointInformation;
+        private IImage _originImage;
 
         public MainViewModel()
         {
@@ -107,7 +111,7 @@ namespace VideoFeatureMatching.ViewModels
 
         #endregion
 
-        #region File System Commands
+        #region File System commands
 
         public Command CreateProjectCommand { get { return new Command(CreateProject); } }
         public Command SaveProjectCommand { get { return new Command(SaveProject, () => IsProjectOpened && !IsProjectSaved); } }
@@ -184,7 +188,7 @@ namespace VideoFeatureMatching.ViewModels
 
         #endregion
 
-        #region Player Properties
+        #region Player properties
 
         public PlayerStates PlayerState
         {
@@ -222,6 +226,17 @@ namespace VideoFeatureMatching.ViewModels
             }
         }
 
+        public IImage OriginImage
+        {
+            get { return _originImage; }
+            set
+            {
+                if (Equals(value, _originImage)) return;
+                _originImage = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public IImage VideoImageSource
         {
             get { return _videoImageSource; }
@@ -232,6 +247,8 @@ namespace VideoFeatureMatching.ViewModels
                 RaisePropertyChanged();
             }
         }
+
+        public string FrameInformation { get; set; }
 
         #endregion
 
@@ -273,7 +290,7 @@ namespace VideoFeatureMatching.ViewModels
                 }
             }
 
-            VideoImageSource = imageFrame;
+            OriginImage = VideoImageSource = imageFrame;
 
             //Wait to display correct framerate
             var frameRate = capture.GetCaptureProperty(CapProp.Fps);
@@ -304,6 +321,70 @@ namespace VideoFeatureMatching.ViewModels
             _capture.Stop();
             Progress = 0;
             PlayerState = PlayerStates.Stopped;
+        }
+
+        #endregion
+
+        #region Point handlers
+
+        public void ShowPointInformation(double x, double y)
+        {
+            int frameIndex = (int)_capture.GetCaptureProperty(CapProp.PosFrames) - 1;
+            var keyFeaturesVector = _projectFile.Model.GetKeyFeatures(frameIndex);
+
+            var nearestKeyFeature = GetNearestKeyPoint(x, y, keyFeaturesVector);
+
+            var keyIndex = keyFeaturesVector.FirstIndexOf(keyFeature => keyFeature.Point == nearestKeyFeature.Point);
+
+            var chain = _projectFile.Model.GetChain(frameIndex, keyIndex);
+            int firstFrame = frameIndex;
+            int lastFrame = frameIndex;
+            foreach (var pair in chain)
+            {
+                firstFrame = Math.Min(firstFrame, pair.Item1);
+                lastFrame = Math.Max(lastFrame, pair.Item2);
+            }
+
+            PointInformation = String.Format(Strings.PointInformationFormat,
+                firstFrame,
+                frameIndex,
+                lastFrame);
+
+            var image = (IImage)OriginImage.Clone();
+            CvInvoke.Circle(image, Point.Round(nearestKeyFeature.Point), 5, new Bgr(Color.Yellow).MCvScalar, 2);
+            VideoImageSource = image;
+        }
+
+        private MKeyPoint GetNearestKeyPoint(double x, double y, VectorOfKeyPoint keyFeaturesVector)
+        {
+            var width = _capture.GetCaptureProperty(CapProp.FrameWidth);
+            var height = _capture.GetCaptureProperty(CapProp.FrameHeight);
+            var point = new PointF((float) (x*width), (float) (y*height));
+
+            var result = keyFeaturesVector.Enumerable().First();
+            var minDistanse = double.MaxValue;
+
+            foreach (var mKeyPoint in keyFeaturesVector.Enumerable())
+            {
+                var distance = new LineSegment2DF(mKeyPoint.Point, point).Length;
+                if (distance < minDistanse)
+                {
+                    result = mKeyPoint;
+                    minDistanse = distance;
+                }
+            }
+            return result;
+        }
+
+        public string PointInformation
+        {
+            get { return _pointInformation; }
+            set
+            {
+                if (value == _pointInformation) return;
+                _pointInformation = value;
+                RaisePropertyChanged();
+            }
         }
 
         #endregion
