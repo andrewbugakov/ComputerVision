@@ -31,6 +31,7 @@ namespace VideoFeatureMatching.ViewModels
         private IImage _videoImageSource;
         private string _pointInformation;
         private IImage _originImage;
+        private string _videoInformation;
 
         public MainViewModel()
         {
@@ -88,6 +89,7 @@ namespace VideoFeatureMatching.ViewModels
             _capture = new Capture(projectFile.Model.VideoPath);
             _capture.ImageGrabbed += CaptureOnImageGrabbed;
 
+            VideoInformation = GetVideoInformation(_capture);
             Progress = 0;
             RaisePropertyChanged("PlayPauseCommand");
             RaisePropertyChanged("StopCommand");
@@ -106,11 +108,14 @@ namespace VideoFeatureMatching.ViewModels
             RaisePropertyChanged("SaveAsProjectCommand");
             RaisePropertyChanged("CloseProjectCommand");
 
+            Stop();
             _capture.ImageGrabbed -= CaptureOnImageGrabbed;
             _capture = null;
 
             RaisePropertyChanged("PlayPauseCommand");
             RaisePropertyChanged("StopCommand");
+
+            VideoInformation = String.Empty;
         }
 
         #endregion
@@ -252,7 +257,16 @@ namespace VideoFeatureMatching.ViewModels
             }
         }
 
-        public string FrameInformation { get; set; }
+        public string VideoInformation
+        {
+            get { return _videoInformation; }
+            set
+            {
+                if (value == _videoInformation) return;
+                _videoInformation = value;
+                RaisePropertyChanged();
+            }
+        }
 
         #endregion
 
@@ -395,7 +409,30 @@ namespace VideoFeatureMatching.ViewModels
 
         #region Helpers
 
-        public Func<Window> GetCurrentWindowDelegate { get; set; }
+        private string GetVideoInformation(Capture capture)
+        {
+            var height = _capture.GetCaptureProperty(CapProp.FrameHeight); 
+            var width = _capture.GetCaptureProperty(CapProp.FrameWidth);
+            var frameRate = capture.GetCaptureProperty(CapProp.Fps);
+            var totalFrames = capture.GetCaptureProperty(CapProp.FrameCount);
+            var codecDouble = capture.GetCaptureProperty(CapProp.FourCC);
+            var codec = ConvertToStringCaptureProperty(codecDouble);
+
+            return String.Format("Format: {0}x{1}\nFPS: {2}\nFrames: {3}\nCodec: {4}",
+                width,
+                height,
+                frameRate,
+                totalFrames,
+                codec);
+        }
+
+        private string ConvertToStringCaptureProperty(double value)
+        {
+            // step by step
+            var uInt32 = Convert.ToUInt32(value);
+            byte[] bytes = BitConverter.GetBytes(uInt32);
+            return System.Text.Encoding.UTF8.GetString(bytes);
+        }
 
         #endregion
     }

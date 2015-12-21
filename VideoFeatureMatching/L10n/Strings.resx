@@ -289,4 +289,7 @@ First frame: {0}
 Current frame: {1}
 Last frame: {2}</value>
   </data>
+  <data name="VideoInformationFormat" xml:space="preserve">
+    <value>Format: {0}x{1}\nFPS: {2}\nFrames: {3}\nCodec: {4}</value>
+  </data>
 </root>

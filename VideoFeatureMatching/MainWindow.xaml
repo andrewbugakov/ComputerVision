@@ -67,7 +67,7 @@
                 </Slider.IsEnabled>
             </Slider>
         </Grid>
-        <TextBlock Text="{Binding PointInformation}" Grid.Row="2" Grid.Column="0" />
-        <TextBlock Text="{Binding PointInformation}" Grid.Row="2" Grid.Column="1" />
+        <TextBlock Text="{Binding VideoInformation}" Grid.Row="2" Grid.Column="0" Margin="5" />
+        <TextBlock Text="{Binding PointInformation}" Grid.Row="2" Grid.Column="1" Margin="5" />
     </Grid>
 </Window>

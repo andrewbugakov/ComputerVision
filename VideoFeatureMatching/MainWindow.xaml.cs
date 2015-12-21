@@ -28,7 +28,6 @@ namespace VideoFeatureMatching
         {
             CvInvoke.UseOpenCL = false;
             ViewModel = new MainViewModel();
-            ViewModel.GetCurrentWindowDelegate = () => this;
 
             InitializeComponent();
 

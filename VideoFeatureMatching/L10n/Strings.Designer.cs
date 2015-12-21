@@ -569,5 +569,14 @@ namespace VideoFeatureMatching.L10n {
                 return ResourceManager.GetString("VideoFile", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Format: {0}x{1}\nFPS: {2}\nFrames: {3}\nCodec: {4}.
+        /// </summary>
+        public static string VideoInformationFormat {
+            get {
+                return ResourceManager.GetString("VideoInformationFormat", resourceCulture);
+            }
+        }
     }
 }
