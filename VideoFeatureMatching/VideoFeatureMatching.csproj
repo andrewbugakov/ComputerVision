@@ -86,10 +86,12 @@
     <Compile Include="Converters\BaseConverter.cs" />
     <Compile Include="Converters\BaseMultiConverter.cs" />
     <Compile Include="Converters\CombiningConverter .cs" />
+    <Compile Include="Converters\CombiningConverter3.cs" />
     <Compile Include="Converters\DescripterConverter.cs" />
     <Compile Include="Converters\DetectorConverter.cs" />
     <Compile Include="Converters\EmguImageConverter.cs" />
     <Compile Include="Converters\EnumEqualConverter.cs" />
+    <Compile Include="Converters\IsNullOrEmptyConverter.cs" />
     <Compile Include="Converters\MatherConverter.cs" />
     <Compile Include="Converters\NotConverter.cs" />
     <Compile Include="Converters\PlayPauseImageSourceConverter.cs" />

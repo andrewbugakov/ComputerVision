@@ -10,7 +10,7 @@ namespace VideoFeatureMatching.Converters
 
         #region IValueConverter Members
 
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public virtual object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             object convertedValue = Converter1.Convert(value, targetType, parameter, culture);
             return Converter2.Convert(convertedValue, targetType, parameter, culture);
