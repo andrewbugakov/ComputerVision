@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Threading;
@@ -20,7 +21,9 @@ namespace VideoFeatureMatching.ViewModels
 {
     public class MainViewModel : BaseViewModel
     {
-        private readonly VideoCloudPointsFileAccessor _baseFileAccessor = new VideoCloudPointsFileAccessor();
+        // Stopwatch needs to make fps to real
+        private readonly Stopwatch _stopwatch;
+        private readonly VideoCloudPointsFileAccessor _baseFileAccessor;
 
         private ProjectFile<VideoCloudPoints> _projectFile;
 
@@ -37,6 +40,8 @@ namespace VideoFeatureMatching.ViewModels
         {
             CvInvoke.UseOpenCL = false;
             _playerState = PlayerStates.Stopped;
+            _stopwatch = new Stopwatch();
+            _baseFileAccessor = new VideoCloudPointsFileAccessor();
         }
 
         #region General Properties
@@ -302,7 +307,12 @@ namespace VideoFeatureMatching.ViewModels
 
             //Wait to display correct framerate
             var frameRate = capture.GetCaptureProperty(CapProp.Fps);
-            Thread.Sleep((int)(1000.0 / frameRate)); //This may result in fast playback if the codec does not tell the truth
+            var rightElapsedMilliseconds = 1000.0 / frameRate;
+            var realElapsedMilliseconds = _stopwatch.ElapsedMilliseconds;
+            var waitingMilliseconds = Math.Max(0, rightElapsedMilliseconds - realElapsedMilliseconds);
+
+            Thread.Sleep((int)waitingMilliseconds);
+            _stopwatch.Restart();
 
             if (frameNumber == totalFrames)
             {
