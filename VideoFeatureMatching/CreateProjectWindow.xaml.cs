@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -46,6 +47,12 @@ namespace VideoFeatureMatching
             {
                 ViewModel.VideoPath = openFileDialog.FileName;
             }
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            ViewModel.FinishCommand.Execute();
+            base.OnClosing(e);
         }
     }
 }

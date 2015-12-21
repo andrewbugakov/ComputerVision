@@ -233,10 +233,14 @@ namespace VideoFeatureMatching.ViewModels
             {
                 return new Command(() =>
                 {
-                    _capture.ImageGrabbed -= CaptureOnImageGrabbed;
-                    _capture.Stop();
-                    _capture.Dispose();
-                    _capture = null;
+                    if (_capture != null)
+                    {
+                        _capture.ImageGrabbed -= CaptureOnImageGrabbed;
+                        _capture.Stop();
+                        _capture.Dispose();
+                        _capture = null;
+                    }
+
                     GeneratingStates = FeatureGeneratingStates.Idle;
                 }, () => IsVideoSelected && GeneratingStates == FeatureGeneratingStates.Processing);
             }
@@ -276,8 +280,7 @@ namespace VideoFeatureMatching.ViewModels
                 return new Command<Window>(window =>
                 {
                     window.Close();
-                    _capture.Stop();
-                    _capture.ImageGrabbed -= CaptureOnImageGrabbed;
+                    FinishCommand.Execute();
                 }, () => GeneratingStates == FeatureGeneratingStates.Finished);
             }
         }
@@ -288,9 +291,8 @@ namespace VideoFeatureMatching.ViewModels
             {
                 return new Command<Window>(window =>
                 {
-                    _capture.Stop();
-                    _capture.ImageGrabbed -= CaptureOnImageGrabbed;
                     window.Close();
+                    FinishCommand.Execute();
                 });
             }
         }
