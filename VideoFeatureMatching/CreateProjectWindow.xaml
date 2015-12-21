@@ -4,7 +4,7 @@
         xmlns:l10N="clr-namespace:VideoFeatureMatching.L10n"
         xmlns:converters="clr-namespace:VideoFeatureMatching.Converters"
         x:Name="window"
-        Title="{x:Static l10N:Strings.Creation}" Height="500" Width="650">
+        Title="{x:Static l10N:Strings.Creation}" Height="500" Width="650" WindowStartupLocation="CenterScreen" >
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>

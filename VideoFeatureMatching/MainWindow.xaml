@@ -3,10 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:l10N="clr-namespace:VideoFeatureMatching.L10n"
         xmlns:converters="clr-namespace:VideoFeatureMatching.Converters"
-        xmlns:viewModels="clr-namespace:VideoFeatureMatching.ViewModels"
         xmlns:core="clr-namespace:VideoFeatureMatching.Core"
         x:Name="window"
-        Title="MainWindow" Height="350" Width="525">
+        Title="{x:Static l10N:Strings.ProgramName}" Height="350" Width="525">
     <Window.Resources>
         <converters:AndMultiConverter x:Key="AndMultiConverter" />
         <converters:PlayPauseImageSourceConverter x:Key="PlayPauseImageSourceConverter" />

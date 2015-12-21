@@ -35,6 +35,7 @@ namespace VideoFeatureMatching.ViewModels
 
         public MainViewModel()
         {
+            CvInvoke.UseOpenCL = false;
             _playerState = PlayerStates.Stopped;
         }
 
@@ -55,18 +56,7 @@ namespace VideoFeatureMatching.ViewModels
 
         public Command OpenAboutCommmand { get { return new Command(() => new About().Show()); } }
 
-        public Command<Window> ExitCommand
-        {
-            get
-            {
-                return new Command<Window>(window =>
-                {
-                    if (SaveExistingProjectIfNeeded(window) == MessageBoxResult.Cancel)
-                        return;
-                    window.Close();
-                });
-            }
-        }
+        public Command<Window> ExitCommand { get { return new Command<Window>(window => window.Close()); } }
 
         #endregion
 
@@ -181,7 +171,7 @@ namespace VideoFeatureMatching.ViewModels
             }
         }
 
-        private MessageBoxResult SaveExistingProjectIfNeeded(Window window)
+        public MessageBoxResult SaveExistingProjectIfNeeded(Window window)
         {
             if (IsProjectOpened && !IsProjectSaved)
             {
