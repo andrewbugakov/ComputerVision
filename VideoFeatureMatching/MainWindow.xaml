@@ -27,15 +27,15 @@
         </Grid.ColumnDefinitions>
         <Menu Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
             <MenuItem Header="{x:Static l10N:Strings.File}">
-                <MenuItem Header="{x:Static l10N:Strings.Create}" Command="{Binding CreateProjectCommand}"/>
-                <MenuItem Header="{x:Static l10N:Strings.Open}" Command="{Binding OpenProjectCommand}"/>
+                <MenuItem Header="{x:Static l10N:Strings.Create}" Command="{Binding CreateProjectCommand}" CommandParameter="{Binding ElementName=window}"/>
+                <MenuItem Header="{x:Static l10N:Strings.Open}" Command="{Binding OpenProjectCommand}" CommandParameter="{Binding ElementName=window}"/>
                 <MenuItem Header="{x:Static l10N:Strings.Save}" Command="{Binding SaveProjectCommand}"/>
                 <MenuItem Header="{x:Static l10N:Strings.SaveAs}" Command="{Binding SaveAsProjectCommand}"/>
-                <MenuItem Header="{x:Static l10N:Strings.Close}" Command="{Binding CloseProjectCommand}"/>
+                <MenuItem Header="{x:Static l10N:Strings.Close}" Command="{Binding CloseProjectCommand}" CommandParameter="{Binding ElementName=window}"/>
                 <Separator/>
                 <MenuItem Header="{x:Static l10N:Strings.Exit}" Command="{Binding ExitCommand}" CommandParameter="{Binding ElementName=window}"/>
             </MenuItem>
-            <MenuItem Header="{x:Static l10N:Strings.About}" Command="{Binding OpenAboutCommmand}"/>
+            <MenuItem Header="{x:Static l10N:Strings.About}" Command="{Binding OpenAboutCommmand}" CommandParameter="{Binding ElementName=window}"/>
         </Menu>
 
         <!-- Player -->
@@ -57,7 +57,7 @@
             <Button Grid.Column="1" Grid.Row="1" Margin="5" Command="{Binding StopCommand}">
                 <Image x:Name="stopButton" Source="Assets/ic_stop.png" Width="20" Height="20" />
             </Button>
-            <TextBlock x:Name="lengthTextBlock" Grid.Column="2" Grid.Row="1" Margin="5" Width="70" Text="{Binding ProgressTime}" VerticalAlignment="Center"/>
+            <TextBlock x:Name="lengthTextBlock" Grid.Column="2" Grid.Row="1" Margin="5" Width="60" Text="{Binding ProgressTime}" VerticalAlignment="Center"/>
             <Slider x:Name="progresSlider" Grid.Column="3" Grid.Row="1" Margin="5" Maximum="1" SmallChange="0.01" Value="{Binding Progress, Mode=TwoWay}" VerticalAlignment="Center">
                 <Slider.IsEnabled>
                     <MultiBinding Converter="{StaticResource AndMultiConverter}">

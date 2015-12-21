@@ -60,7 +60,8 @@ namespace VideoFeatureMatching.ViewModels
             {
                 return new Command<Window>(window =>
                 {
-                    SaveExistingProjectIfNeeded();
+                    if (SaveExistingProjectIfNeeded(window) == MessageBoxResult.Cancel)
+                        return;
                     window.Close();
                 });
             }
@@ -92,8 +93,11 @@ namespace VideoFeatureMatching.ViewModels
             RaisePropertyChanged("StopCommand");
         }
 
-        private void CloseProject()
+        private void CloseProject(Window window)
         {
+            if (SaveExistingProjectIfNeeded(window) == MessageBoxResult.Cancel)
+                return;
+
             _projectFile = null;
             RaisePropertyChanged("IsProjectOpened");
             RaisePropertyChanged("IsProjectSaved");
@@ -113,19 +117,19 @@ namespace VideoFeatureMatching.ViewModels
 
         #region File System commands
 
-        public Command CreateProjectCommand { get { return new Command(CreateProject); } }
-        public Command SaveProjectCommand { get { return new Command(SaveProject, () => IsProjectOpened && !IsProjectSaved); } }
-        public Command SaveAsProjectCommand { get { return new Command(SaveAsProject, () => IsProjectOpened); } }
-        public Command OpenProjectCommand { get { return new Command(OpenProject); } }
-        public Command CloseProjectCommand { get { return new Command(CloseProject, () => IsProjectOpened); } }
+        public ICommand CreateProjectCommand { get { return new Command<Window>(CreateProject); } }
+        public ICommand SaveProjectCommand { get { return new Command(SaveProject, () => IsProjectOpened && !IsProjectSaved); } }
+        public ICommand SaveAsProjectCommand { get { return new Command(SaveAsProject, () => IsProjectOpened); } }
+        public ICommand OpenProjectCommand { get { return new Command<Window>(OpenProject); } }
+        public ICommand CloseProjectCommand { get { return new Command<Window>(CloseProject, () => IsProjectOpened); } }
 
         #endregion
 
         #region File System methods
 
-        private void CreateProject()
+        private void CreateProject(Window window)
         {
-            if (SaveExistingProjectIfNeeded() == MessageBoxResult.Cancel)
+            if (SaveExistingProjectIfNeeded(window) == MessageBoxResult.Cancel)
                 return;
 
             var viewModel = new CreateProjectViewModel();
@@ -152,11 +156,11 @@ namespace VideoFeatureMatching.ViewModels
             _baseFileAccessor.SaveAs(_projectFile);
         }
 
-        private void OpenProject()
+        private void OpenProject(Window window)
         {
             try
             {
-                if (SaveExistingProjectIfNeeded() == MessageBoxResult.Cancel)
+                if (SaveExistingProjectIfNeeded(window) == MessageBoxResult.Cancel)
                     return;
 
                 var project = _baseFileAccessor.Open();
@@ -172,11 +176,11 @@ namespace VideoFeatureMatching.ViewModels
             }
         }
 
-        private MessageBoxResult SaveExistingProjectIfNeeded()
+        private MessageBoxResult SaveExistingProjectIfNeeded(Window window)
         {
             if (IsProjectOpened && !IsProjectSaved)
             {
-                var result = MessageBox.Show(GetCurrentWindowDelegate.Invoke(), Strings.SaveProject, Strings.Attention, MessageBoxButton.YesNoCancel);
+                var result = MessageBox.Show(window, Strings.SaveProject, Strings.Attention, MessageBoxButton.YesNoCancel);
                 if (result == MessageBoxResult.Yes)
                 {
                     SaveProject();
