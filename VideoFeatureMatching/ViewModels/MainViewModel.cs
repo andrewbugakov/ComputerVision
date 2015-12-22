@@ -111,6 +111,7 @@ namespace VideoFeatureMatching.ViewModels
             RaisePropertyChanged("StopCommand");
 
             VideoInformation = String.Empty;
+            PointInformation = String.Empty;
         }
 
         #endregion
@@ -347,6 +348,9 @@ namespace VideoFeatureMatching.ViewModels
 
         public void ShowPointInformation(double x, double y)
         {
+            if (_capture == null)
+                return;
+
             int frameIndex = (int)_capture.GetCaptureProperty(CapProp.PosFrames) - 1;
             if (frameIndex == -1)
                 return;
@@ -363,7 +367,7 @@ namespace VideoFeatureMatching.ViewModels
             foreach (var pair in chain)
             {
                 firstFrame = Math.Min(firstFrame, pair.Item1);
-                lastFrame = Math.Max(lastFrame, pair.Item2);
+                lastFrame = Math.Max(lastFrame, pair.Item1);
             }
 
             PointInformation = String.Format(Strings.PointInformationFormat,
