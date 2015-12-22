@@ -190,7 +190,7 @@ namespace VideoFeatureMatching.L10n {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Surf.
+        ///   Ищет локализованную строку, похожую на SURF.
         /// </summary>
         public static string Descripter1 {
             get {
@@ -199,7 +199,7 @@ namespace VideoFeatureMatching.L10n {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Sift.
+        ///   Ищет локализованную строку, похожую на SIFT.
         /// </summary>
         public static string Descripter2 {
             get {
@@ -208,7 +208,7 @@ namespace VideoFeatureMatching.L10n {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Brief.
+        ///   Ищет локализованную строку, похожую на LATCH.
         /// </summary>
         public static string Descripter3 {
             get {
@@ -226,7 +226,7 @@ namespace VideoFeatureMatching.L10n {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Surf.
+        ///   Ищет локализованную строку, похожую на SURF.
         /// </summary>
         public static string Detector1 {
             get {
@@ -235,7 +235,7 @@ namespace VideoFeatureMatching.L10n {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Fast.
+        ///   Ищет локализованную строку, похожую на FAST.
         /// </summary>
         public static string Detector2 {
             get {
@@ -258,6 +258,51 @@ namespace VideoFeatureMatching.L10n {
         public static string Detector4 {
             get {
                 return ResourceManager.GetString("Detector4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на AKAZE.
+        /// </summary>
+        public static string Detector5 {
+            get {
+                return ResourceManager.GetString("Detector5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на BRISK.
+        /// </summary>
+        public static string Detector6 {
+            get {
+                return ResourceManager.GetString("Detector6", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на GFTT.
+        /// </summary>
+        public static string Detector7 {
+            get {
+                return ResourceManager.GetString("Detector7", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на MSER.
+        /// </summary>
+        public static string Detector8 {
+            get {
+                return ResourceManager.GetString("Detector8", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на STAR.
+        /// </summary>
+        public static string Detector9 {
+            get {
+                return ResourceManager.GetString("Detector9", resourceCulture);
             }
         }
         
@@ -406,7 +451,7 @@ namespace VideoFeatureMatching.L10n {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на BFL2.
+        ///   Ищет локализованную строку, похожую на L1.
         /// </summary>
         public static string Matcher1 {
             get {
@@ -415,11 +460,20 @@ namespace VideoFeatureMatching.L10n {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Hamming.
+        ///   Ищет локализованную строку, похожую на L2.
         /// </summary>
         public static string Matcher2 {
             get {
                 return ResourceManager.GetString("Matcher2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на L2Sqr.
+        /// </summary>
+        public static string Matcher3 {
+            get {
+                return ResourceManager.GetString("Matcher3", resourceCulture);
             }
         }
         

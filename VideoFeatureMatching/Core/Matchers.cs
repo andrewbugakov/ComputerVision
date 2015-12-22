@@ -2,7 +2,8 @@ namespace VideoFeatureMatching.Core
 {
     public enum Matchers
     {
-        BFL2,
-        Hamming
+        L1,
+        L2,
+        L2Sqr
     }
 }

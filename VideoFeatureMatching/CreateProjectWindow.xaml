@@ -32,6 +32,11 @@
                 <ComboBoxItem Content="{x:Static l10N:Strings.Detector2}"/>
                 <ComboBoxItem Content="{x:Static l10N:Strings.Detector3}"/>
                 <ComboBoxItem Content="{x:Static l10N:Strings.Detector4}"/>
+                <ComboBoxItem Content="{x:Static l10N:Strings.Detector5}"/>
+                <ComboBoxItem Content="{x:Static l10N:Strings.Detector6}"/>
+                <ComboBoxItem Content="{x:Static l10N:Strings.Detector7}"/>
+                <ComboBoxItem Content="{x:Static l10N:Strings.Detector8}"/>
+                <ComboBoxItem Content="{x:Static l10N:Strings.Detector9}"/>
             </ComboBox>
             <TextBlock Text="{x:Static l10N:Strings.DescripterLabel}" Margin="5,5,5,0"/>
             <ComboBox SelectedIndex="{Binding SelectedDescripter, Converter={converters:DescripterConverter}, Mode=TwoWay}" Margin="5">
@@ -43,6 +48,7 @@
             <ComboBox SelectedIndex="{Binding SelectedMatcher, Converter={converters:MatherConverter}, Mode=TwoWay}" Margin="5">
                 <ComboBoxItem Content="{x:Static l10N:Strings.Matcher1}"/>
                 <ComboBoxItem Content="{x:Static l10N:Strings.Matcher2}"/>
+                <ComboBoxItem Content="{x:Static l10N:Strings.Matcher3}"/>
             </ComboBox>
             <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft">
                 <Button Content="{x:Static l10N:Strings.Finish}" Command="{Binding FinishCommand}" Margin="5" MinWidth="50"/>

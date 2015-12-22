@@ -4,6 +4,9 @@
     {
         Surf,
         Sift,
-        Brief
+        DAISY,
+        Freak,
+        LATCH,
+        LUCID
     }
 }

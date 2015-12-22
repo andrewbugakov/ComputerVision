@@ -5,6 +5,12 @@
         Surf,
         Fast,
         ORB,
-        Sift
+        Sift,
+        AKAZE,
+        Brisk,
+        GFTTDetector,
+        MSERDetector,
+        SimpleBlobDetector,
+        StarDetector
     }
 }

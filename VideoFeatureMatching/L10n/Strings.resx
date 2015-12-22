@@ -230,10 +230,10 @@
     <value>Choose</value>
   </data>
   <data name="Detector1" xml:space="preserve">
-    <value>Surf</value>
+    <value>SURF</value>
   </data>
   <data name="Detector2" xml:space="preserve">
-    <value>Fast</value>
+    <value>FAST</value>
   </data>
   <data name="Detector3" xml:space="preserve">
     <value>ORB</value>
@@ -242,13 +242,10 @@
     <value>Point cloud creation</value>
   </data>
   <data name="Descripter1" xml:space="preserve">
-    <value>Surf</value>
+    <value>SURF</value>
   </data>
   <data name="Descripter2" xml:space="preserve">
-    <value>Sift</value>
-  </data>
-  <data name="Descripter3" xml:space="preserve">
-    <value>Brief</value>
+    <value>SIFT</value>
   </data>
   <data name="DescripterLabel" xml:space="preserve">
     <value>Description:</value>
@@ -260,10 +257,10 @@
     <value>Matcher:</value>
   </data>
   <data name="Matcher1" xml:space="preserve">
-    <value>BFL2</value>
+    <value>L1</value>
   </data>
   <data name="Matcher2" xml:space="preserve">
-    <value>Hamming</value>
+    <value>L2</value>
   </data>
   <data name="VideoExtenstion1" xml:space="preserve">
     <value>MP4|*.mp4</value>
@@ -291,5 +288,26 @@ Last frame: {2}</value>
   </data>
   <data name="VideoInformationFormat" xml:space="preserve">
     <value>Format: {0}x{1}\nFPS: {2}\nFrames: {3}\nCodec: {4}</value>
+  </data>
+  <data name="Detector5" xml:space="preserve">
+    <value>AKAZE</value>
+  </data>
+  <data name="Detector6" xml:space="preserve">
+    <value>BRISK</value>
+  </data>
+  <data name="Detector7" xml:space="preserve">
+    <value>GFTT</value>
+  </data>
+  <data name="Detector8" xml:space="preserve">
+    <value>MSER</value>
+  </data>
+  <data name="Detector9" xml:space="preserve">
+    <value>STAR</value>
+  </data>
+  <data name="Descripter3" xml:space="preserve">
+    <value>LATCH</value>
+  </data>
+  <data name="Matcher3" xml:space="preserve">
+    <value>L2Sqr</value>
   </data>
 </root>

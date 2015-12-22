@@ -305,16 +305,28 @@ namespace VideoFeatureMatching.ViewModels
 
         private Feature2D GetNativeDetector(Detectors detectors)
         {
+            const int numberOfFeatures = 100;
+
             switch (detectors)
             {
                 case Detectors.Surf:
-                    return new SURF(200);
+                    return new SURF(100);
                 case Detectors.Fast:
                     return new FastDetector();
                 case Detectors.ORB:
-                    return new ORBDetector();
+                    return new ORBDetector(numberOfFeatures: numberOfFeatures);
                 case Detectors.Sift:
-                    return new SIFT();
+                    return new SIFT(nFeatures: numberOfFeatures);
+                case Detectors.AKAZE:
+                    return new AKAZE();
+                case Detectors.Brisk:
+                    return new Brisk();
+                case Detectors.GFTTDetector:
+                    return new GFTTDetector(maxCorners: numberOfFeatures);
+                case Detectors.MSERDetector:
+                    return new MSERDetector();
+                case Detectors.StarDetector:
+                    return new StarDetector(maxSize: numberOfFeatures);
                 default:
                     throw new ArgumentException("Don't know type " + detectors);
             }
@@ -325,11 +337,11 @@ namespace VideoFeatureMatching.ViewModels
             switch (descripter)
             {
                 case Descripters.Surf:
-                    return new SURF(200);
+                    return new SURF(100);
                 case Descripters.Sift:
                     return new SIFT();
-                case Descripters.Brief:
-                    return new BriefDescriptorExtractor();
+                case Descripters.LATCH:
+                    return new LATCH();
                 default:
                     throw new ArgumentException("Don't know type " + descripter);
             }
@@ -339,10 +351,12 @@ namespace VideoFeatureMatching.ViewModels
         {
             switch (matcher)
             {
-                case Matchers.BFL2:
+                case Matchers.L1:
+                    return new BFMatcher(DistanceType.L1);
+                case Matchers.L2:
                     return new BFMatcher(DistanceType.L2);
-                case Matchers.Hamming:
-                    return new BFMatcher(DistanceType.Hamming);
+                case Matchers.L2Sqr:
+                    return new BFMatcher(DistanceType.L2Sqr);
                 default:
                     throw new ArgumentException("Don't know type " + matcher);
             }
