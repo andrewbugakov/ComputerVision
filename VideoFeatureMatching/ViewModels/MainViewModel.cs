@@ -348,6 +348,9 @@ namespace VideoFeatureMatching.ViewModels
         public void ShowPointInformation(double x, double y)
         {
             int frameIndex = (int)_capture.GetCaptureProperty(CapProp.PosFrames) - 1;
+            if (frameIndex == -1)
+                return;
+
             var keyFeaturesVector = _projectFile.Model.GetKeyFeatures(frameIndex);
 
             var nearestKeyFeature = GetNearestKeyPoint(x, y, keyFeaturesVector);
