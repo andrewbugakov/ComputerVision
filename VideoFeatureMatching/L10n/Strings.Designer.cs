@@ -370,20 +370,11 @@ namespace VideoFeatureMatching.L10n {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Noname.
+        ///   Ищет локализованную строку, похожую на untittled.
         /// </summary>
         public static string Filename_untittled {
             get {
                 return ResourceManager.GetString("Filename_untittled", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Filling volume, liters.
-        /// </summary>
-        public static string FillingVolume {
-            get {
-                return ResourceManager.GetString("FillingVolume", resourceCulture);
             }
         }
         
@@ -496,7 +487,7 @@ namespace VideoFeatureMatching.L10n {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Point
+        ///   Ищет локализованную строку, похожую на Point:
         ///First frame: {0}
         ///Current frame: {1}
         ///Last frame: {2}.
@@ -508,7 +499,7 @@ namespace VideoFeatureMatching.L10n {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Video feature mathing programm.
+        ///   Ищет локализованную строку, похожую на Video feature mathing program.
         /// </summary>
         public static string ProgramName {
             get {

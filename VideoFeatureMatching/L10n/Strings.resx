@@ -137,7 +137,7 @@
     <value>2</value>
   </data>
   <data name="Filename_untittled" xml:space="preserve">
-    <value>Noname</value>
+    <value>untittled</value>
   </data>
   <data name="Help" xml:space="preserve">
     <value>Help</value>
@@ -202,11 +202,8 @@
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
-  <data name="FillingVolume" xml:space="preserve">
-    <value>Filling volume, liters</value>
-  </data>
   <data name="ProgramName" xml:space="preserve">
-    <value>Video feature mathing programm</value>
+    <value>Video feature mathing program</value>
   </data>
   <data name="Create" xml:space="preserve">
     <value>Create</value>
@@ -281,7 +278,7 @@
     <value>All|*.mp4;*.avi;*.mov</value>
   </data>
   <data name="PointInformationFormat" xml:space="preserve">
-    <value>Point
+    <value>Point:
 First frame: {0}
 Current frame: {1}
 Last frame: {2}</value>
